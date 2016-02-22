@@ -1,0 +1,32 @@
+#fff
+
+ rgb(x)
+   hsl(
+   yellow
+    rgba(555,black)
+      xxx()
+      (
+        1,
+        2,
+        3,
+        #12345678
+      )
+    )
+    xxx(abc)
+
+/* darkgrey */
+
+/* darkgrey
+
+darksalmon
+
+ */
+ darksalmon
+
+rgb(/* limegreen rgba(x)*/#333)
+
+rgb(x)blue
+
+( red, green, blue )
+
+white

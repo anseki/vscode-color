@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Color Picker</title>
+
+<base href="../lib/app/">
+
+<link href="./jquery-ui.min.css" rel="stylesheet"/>
+<link href="./jquery.colorpicker.min.css" rel="stylesheet"/>
+<link href="./jquery.colorpicker-formats.css" rel="stylesheet"/>
+<link href="./jquery.datalist.min.css" rel="stylesheet"/><!-- Polyfill -->
+<link href="./ui.css" rel="stylesheet"/>
+
+<style>
+body { padding: 30px; }
+</style>
+
+<script src="./jquery-2.2.0.min.js"></script>
+<script src="./jquery-ui.min.js"></script>
+<script src="./jquery.colorpicker.min.js"></script>
+<script src="./jquery.colorpicker-swatchesswitcher.js"></script>
+<script src="./jquery.colorpicker-formats.js"></script>
+<script src="./jquery.datalist.min.js"></script><!-- Polyfill -->
+<!--<script src="./ui.js"></script>-->
+<script src="../../test/css-colors.js"></script>
+<script>/* ui.js */
+
+function initUi(value, form, stats) {
+  var uiController = window.exports; // emulate `require('./ui-controller.js')`
+
+  uiController.init({
+    value: value,
+    form: form,
+    stats: stats || {},
+    resizeWindow: function() {
+      console.log('resizeWindow(' + Array.prototype.slice.call(arguments).join(', ') + ')');
+    },
+    commit: value => {
+      var stats = uiController.getStats(), position = [0,0]; // ui.getPosition();
+      stats.x = position[0];
+      stats.y = position[1];
+      console.log('<commit> value: ' + value + ', stats:');
+      console.log(stats);
+      // initOptions.stats = stats;
+      // ipc.send('close-ui', value);
+    }
+  });
+}
+
+var paletteLoader = (() => {
+  var palettes;
+  return {
+    init: (storeDir, parser, defaultPalette, defaultPaletteLabel) => {
+      palettes = {
+        '': {
+          palette: defaultPalette,
+          label: defaultPaletteLabel
+        }
+      };
+    },
+    getList: () => Object.keys(palettes)
+      .map(fileName => ({fileName: fileName, label: palettes[fileName].label})),
+    getPalette: fileName => palettes[''].palette
+  };
+})();
+
+// fake object for `require()`
+window.require = id => {
+  if (/(?:\/|^)css-colors\.json$/.test(id)) {
+    return window.cssColors;
+  } else if (/(?:\/|^)palette-loader\.js$/.test(id)) {
+    return paletteLoader;
+  }
+};
+
+// fake object for `exports.METHOD = ...` in ui-controller.js
+window.exports = {};
+
+$(() => { initUi('#088', ''); }); // largePalette / simple / compact / compact2 / byPalette
+
+</script>
+<script src="./ui-controller.js"></script>
+
+</head>
+<body></body>
+</html>

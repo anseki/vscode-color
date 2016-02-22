@@ -1,0 +1,326 @@
+- name: Red
+  color: rgb(237, 10, 63)
+- name: Maroon
+  color: rgb(195, 33, 72)
+- name: Scarlet
+  color: rgb(253, 14, 53)
+- name: Brick Red
+  color: rgb(198, 45, 66)
+- name: English Vermilion
+  color: rgb(204, 71, 75)
+- name: Madder Lake
+  color: rgb(204, 51, 54)
+- name: Permanent Geranium Lake
+  color: rgb(225, 44, 44)
+- name: Maximum Red
+  color: rgb(217, 33, 33)
+- name: Indian Red
+  color: rgb(185, 78, 72)
+- name: Orange-Red
+  color: rgb(255, 63, 52)
+- name: Sunset Orange
+  color: rgb(254, 76, 64)
+- name: Bittersweet
+  color: rgb(254, 111, 94)
+- name: Dark Venetian Red
+  color: rgb(179, 59, 36)
+- name: Venetian Red
+  color: rgb(204, 85, 61)
+- name: Light Venetian Red
+  color: rgb(230, 115, 92)
+- name: Vivid Tangerine
+  color: rgb(255, 153, 128)
+- name: Middle Red
+  color: rgb(229, 144, 115)
+- name: Burnt Orange
+  color: rgb(255, 112, 52)
+- name: Red-Orange
+  color: rgb(255, 104, 31)
+- name: Orange
+  color: rgb(255, 136, 100)
+- name: Macaroni and Cheese
+  color: rgb(255, 185, 123)
+- name: Middle Yellow Red
+  color: rgb(236, 177, 118)
+- name: Mango Tango
+  color: rgb(231, 114, 0)
+- name: Yellow-Orange
+  color: rgb(255, 174, 66)
+- name: Maximum Yellow Red
+  color: rgb(242, 186, 73)
+- name: Banana Mania
+  color: rgb(251, 231, 178)
+- name: Maize
+  color: rgb(242, 198, 73)
+- name: Orange-Yellow
+  color: rgb(248, 213, 104)
+- name: Goldenrod
+  color: rgb(252, 214, 103)
+- name: Dandelion
+  color: rgb(254, 216, 93)
+- name: Yellow
+  color: rgb(252, 232, 131)
+- name: Green-Yellow
+  color: rgb(241, 231, 136)
+- name: Middle Yellow
+  color: rgb(255, 235, 0)
+- name: Olive Green
+  color: rgb(181, 179, 92)
+- name: Spring Green
+  color: rgb(236, 235, 189)
+- name: Maximum Yellow
+  color: rgb(250, 250, 55)
+- name: Canary
+  color: rgb(255, 255, 153)
+- name: Lemon Yellow
+  color: rgb(255, 255, 159)
+- name: Maximum Green Yellow
+  color: rgb(217, 230, 80)
+- name: Middle Green Yellow
+  color: rgb(172, 191, 96)
+- name: Inchworm
+  color: rgb(175, 227, 19)
+- name: Light Chrome Green
+  color: rgb(190, 230, 75)
+- name: Yellow-Green
+  color: rgb(197, 225, 122)
+- name: Maximum Green
+  color: rgb(94, 140, 49)
+- name: Asparagus
+  color: rgb(123, 160, 91)
+- name: Granny Smith Apple
+  color: rgb(157, 224, 147)
+- name: Fern
+  color: rgb(99, 183, 108)
+- name: Middle Green
+  color: rgb(77, 140, 87)
+- name: Green
+  color: rgb(58, 166, 85)
+- name: Medium Chrome Green
+  color: rgb(108, 166, 124)
+- name: Forest Green
+  color: rgb(95, 167, 119)
+- name: Sea Green
+  color: rgb(147, 223, 184)
+- name: Shamrock
+  color: rgb(51, 204, 153)
+- name: Mountain Meadow
+  color: rgb(26, 179, 133)
+- name: Jungle Green
+  color: rgb(41, 171, 135)
+- name: Caribbean Green
+  color: rgb(0, 204, 153)
+- name: Tropical Rain Forest
+  color: rgb(0, 117, 94)
+- name: Middle Blue Green
+  color: rgb(141, 217, 204)
+- name: Pine Green
+  color: rgb(1, 120, 111)
+- name: Maximum Blue Green
+  color: rgb(48, 191, 191)
+- name: Robin's Egg Blue
+  color: rgb(0, 204, 204)
+- name: Teal Blue
+  color: rgb(0, 128, 128)
+- name: Light Blue
+  color: rgb(143, 216, 216)
+- name: Aquamarine
+  color: rgb(149, 224, 232)
+- name: Turquoise Blue
+  color: rgb(108, 218, 231)
+- name: Outer Space
+  color: rgb(45, 56, 58)
+- name: Sky Blue
+  color: rgb(118, 215, 234)
+- name: Middle Blue
+  color: rgb(126, 212, 230)
+- name: Blue-Green
+  color: rgb(0, 149, 183)
+- name: Pacific Blue
+  color: rgb(0, 157, 196)
+- name: Cerulean
+  color: rgb(2, 164, 211)
+- name: Maximum Blue
+  color: rgb(71, 171, 204)
+- name: Blue (I)
+  color: rgb(46, 180, 230)
+- name: Cerulean Blue
+  color: rgb(51, 154, 204)
+- name: Cornflower
+  color: rgb(147, 204, 234)
+- name: Green-Blue
+  color: rgb(40, 135, 200)
+- name: Midnight Blue
+  color: rgb(0, 70, 140)
+- name: Navy Blue
+  color: rgb(0, 102, 204)
+- name: Denim
+  color: rgb(21, 96, 189)
+- name: Blue (III)
+  color: rgb(0, 102, 255)
+- name: Cadet Blue
+  color: rgb(169, 178, 195)
+- name: Periwinkle
+  color: rgb(195, 205, 230)
+- name: Blue (II)
+  color: rgb(69, 112, 230)
+- name: Wild Blue Yonder
+  color: rgb(122, 137, 184)
+- name: Indigo
+  color: rgb(79, 105, 198)
+- name: Manatee
+  color: rgb(141, 144, 161)
+- name: Cobalt Blue
+  color: rgb(140, 144, 200)
+- name: Celestial Blue
+  color: rgb(112, 112, 204)
+- name: Blue Bell
+  color: rgb(153, 153, 204)
+- name: Maximum Blue Purple
+  color: rgb(172, 172, 230)
+- name: Violet-Blue
+  color: rgb(118, 110, 200)
+- name: Blue-Violet
+  color: rgb(100, 86, 183)
+- name: Ultramarine Blue
+  color: rgb(63, 38, 191)
+- name: Middle Blue Purple
+  color: rgb(139, 114, 190)
+- name: Purple Heart
+  color: rgb(101, 45, 193)
+- name: Royal Purple
+  color: rgb(107, 63, 160)
+- name: Violet (II)
+  color: rgb(131, 89, 163)
+- name: Medium Violet
+  color: rgb(143, 71, 179)
+- name: Wisteria
+  color: rgb(201, 160, 220)
+- name: Lavender (I)
+  color: rgb(191, 143, 204)
+- name: Vivid Violet
+  color: rgb(128, 55, 144)
+- name: Maximum Purple
+  color: rgb(115, 51, 128)
+- name: Purple Mountains' Majesty
+  color: rgb(214, 174, 221)
+- name: Fuchsia
+  color: rgb(193, 84, 193)
+- name: Pink Flamingo
+  color: rgb(252, 116, 253)
+- name: Violet (I)
+  color: rgb(115, 46, 108)
+- name: Brilliant Rose
+  color: rgb(230, 103, 206)
+- name: Orchid
+  color: rgb(226, 156, 210)
+- name: Plum
+  color: rgb(142, 49, 121)
+- name: Medium Rose
+  color: rgb(217, 108, 190)
+- name: Thistle
+  color: rgb(235, 176, 215)
+- name: Mulberry
+  color: rgb(200, 80, 155)
+- name: Red-Violet
+  color: rgb(187, 51, 133)
+- name: Middle Purple
+  color: rgb(217, 130, 181)
+- name: Maximum Red Purple
+  color: rgb(166, 58, 121)
+- name: Jazzberry Jam
+  color: rgb(165, 11, 94)
+- name: Eggplant
+  color: rgb(97, 64, 81)
+- name: Magenta
+  color: rgb(246, 83, 166)
+- name: Cerise
+  color: rgb(218, 50, 135)
+- name: Wild Strawberry
+  color: rgb(255, 51, 153)
+- name: Lavender (II)
+  color: rgb(251, 174, 210)
+- name: Cotton Candy
+  color: rgb(255, 183, 213)
+- name: Carnation Pink
+  color: rgb(255, 166, 201)
+- name: Violet-Red
+  color: rgb(247, 70, 138)
+- name: Razzmatazz
+  color: rgb(227, 11, 92)
+- name: Pig Pink
+  color: rgb(253, 215, 228)
+- name: Carmine
+  color: rgb(230, 46, 107)
+- name: Blush
+  color: rgb(219, 80, 121)
+- name: Tickle Me Pink
+  color: rgb(252, 128, 165)
+- name: Mauvelous
+  color: rgb(240, 145, 169)
+- name: Salmon
+  color: rgb(255, 145, 164)
+- name: Middle Red Purple
+  color: rgb(165, 83, 83)
+- name: Mahogany
+  color: rgb(202, 52, 53)
+- name: Melon
+  color: rgb(254, 186, 173)
+- name: Pink Sherbert
+  color: rgb(247, 163, 142)
+- name: Burnt Sienna
+  color: rgb(233, 116, 81)
+- name: Brown
+  color: rgb(175, 89, 62)
+- name: Sepia
+  color: rgb(158, 91, 64)
+- name: Fuzzy Wuzzy
+  color: rgb(135, 66, 31)
+- name: Beaver
+  color: rgb(146, 111, 91)
+- name: Tumbleweed
+  color: rgb(222, 166, 129)
+- name: Raw Sienna
+  color: rgb(210, 125, 70)
+- name: Van Dyke Brown
+  color: rgb(102, 66, 40)
+- name: Tan
+  color: rgb(217, 154, 108)
+- name: Desert Sand
+  color: rgb(237, 201, 175)
+- name: Peach
+  color: rgb(255, 203, 164)
+- name: Burnt Umber
+  color: rgb(128, 85, 51)
+- name: Apricot
+  color: rgb(253, 213, 177)
+- name: Almond
+  color: rgb(238, 217, 196)
+- name: Raw Umber
+  color: rgb(102, 82, 51)
+- name: Shadow
+  color: rgb(131, 112, 80)
+- name: Raw Sienna (I)
+  color: rgb(230, 188, 92)
+- name: Timberwolf
+  color: rgb(217, 214, 207)
+- name: Gold (I)
+  color: rgb(146, 146, 110)
+- name: Gold (II)
+  color: rgb(230, 190, 138)
+- name: Silver
+  color: rgb(201, 192, 187)
+- name: Copper
+  color: rgb(218, 138, 103)
+- name: Antique Brass
+  color: rgb(200, 138, 101)
+- name: Black
+  color: rgb(0, 0, 0)
+- name: Charcoal Gray
+  color: rgb(115, 106, 98)
+- name: Gray
+  color: rgb(139, 134, 128)
+- name: Blue-Gray
+  color: rgb(200, 200, 205)
+- name: White
+  color: rgb(255, 255, 255)

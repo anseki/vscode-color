@@ -1,0 +1,95 @@
+@import "compass";
+@import "common";
+
+/*
+  Length of margin for shadow.
+  Since how to get these isn't known, it uses actual size.
+  [jquery-ui.css]
+    .ui-dialog{box-shadow: 3px 5px 20px 3px rgba(0, 0, 0, 0.2);}
+*/
+$body-padding-clearance: 5px;
+$body-padding-top: 12px + $body-padding-clearance;
+$body-padding-right: 20px + $body-padding-clearance;
+$body-padding-bottom: 22px + $body-padding-clearance;
+$body-padding-left: 14px + $body-padding-clearance;
+
+body {
+  margin: 0;
+  padding-top: $body-padding-top;
+  padding-right: $body-padding-right;
+  padding-bottom: $body-padding-bottom;
+  padding-left: $body-padding-left;
+  -webkit-app-region: drag;
+  overflow: hidden;
+
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+button,
+input,
+select,
+label,
+.ui-colorpicker-map,
+.ui-colorpicker-bar,
+.ui-colorpicker-preview,
+.ui-colorpicker-swatches {
+  -webkit-app-region: no-drag;
+}
+
+label {
+  user-select: none;
+}
+
+#color-picker {
+  display: inline-block;
+
+  input[type="radio"],
+  input[type="checkbox"],
+  label[for] {
+    cursor: pointer;
+  }
+
+  // `form` in options
+
+  &.form-default {
+    .ui-colorpicker-hsv-container,
+    .ui-colorpicker-alpha-container,
+    .ui-colorpicker-rgb-container,
+    .ui-colorpicker-lab-container,
+    .ui-colorpicker-cmyk-container {
+      vertical-align: bottom;
+    }
+
+    .ui-colorpicker-alpha-container { padding-top: 10px; }
+    .ui-colorpicker-swatchesswitcher-container select { width: 132px; }
+    .ui-colorpicker-swatches-container { padding-top: 5px; }
+    .ui-colorpicker-formats-container { vertical-align: bottom; }
+  }
+
+  &.form-largePalette {
+    .ui-colorpicker-swatchesswitcher-container select { max-width: 288px; }
+    .ui-colorpicker > table > tbody > tr:nth-of-type(3) { height: 14px; }
+    .ui-colorpicker-swatches-container { padding-top: 0; }
+    .ui-colorpicker-formats-container { vertical-align: bottom; }
+  }
+
+  &.form-simple {
+    .ui-colorpicker-formats-container { vertical-align: bottom; }
+  }
+
+  &.form-compact {
+    .ui-colorpicker-hsv-container { padding-top: 5px; }
+    .ui-colorpicker-alpha-container { padding-top: 6px; }
+  }
+
+  &.form-compact2 {
+    .ui-colorpicker-hsv-container { padding-top: 3px; }
+    .ui-colorpicker-alpha-container { padding-top: 6px; }
+  }
+
+  &.form-byPalette {
+    .ui-colorpicker-preview-container { width: 102px; }
+    .ui-colorpicker-swatchesswitcher-container select { max-width: 180px; }
+  }
+}

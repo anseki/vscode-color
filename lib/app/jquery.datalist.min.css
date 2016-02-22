@@ -1,0 +1,1 @@
+.datalist{display:none;list-style:none;background:#fff;box-shadow:0 2px 2px #999;position:absolute;overflow-y:auto;overflow-x:hidden;margin:0;padding:0;z-index:999}.datalist:empty{display:none !important}.datalist li{margin:0;padding:3px;white-space:nowrap;cursor:default}.datalist li.active{background:#3875d7;color:#fff}

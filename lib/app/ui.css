@@ -1,0 +1,114 @@
+/*
+  Length of margin for shadow.
+  Since how to get these isn't known, it uses actual size.
+  [jquery-ui.css]
+    .ui-dialog{box-shadow: 3px 5px 20px 3px rgba(0, 0, 0, 0.2);}
+*/
+/* line 16, ui.scss */
+body {
+  margin: 0;
+  padding-top: 17px;
+  padding-right: 25px;
+  padding-bottom: 27px;
+  padding-left: 19px;
+  -webkit-app-region: drag;
+  overflow: hidden;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+/* line 29, ui.scss */
+button,
+input,
+select,
+label,
+.ui-colorpicker-map,
+.ui-colorpicker-bar,
+.ui-colorpicker-preview,
+.ui-colorpicker-swatches {
+  -webkit-app-region: no-drag;
+}
+
+/* line 40, ui.scss */
+label {
+  user-select: none;
+}
+
+/* line 44, ui.scss */
+#color-picker {
+  display: inline-block;
+}
+/* line 47, ui.scss */
+#color-picker input[type="radio"],
+#color-picker input[type="checkbox"],
+#color-picker label[for] {
+  cursor: pointer;
+}
+/* line 56, ui.scss */
+#color-picker.form-default .ui-colorpicker-hsv-container,
+#color-picker.form-default .ui-colorpicker-alpha-container,
+#color-picker.form-default .ui-colorpicker-rgb-container,
+#color-picker.form-default .ui-colorpicker-lab-container,
+#color-picker.form-default .ui-colorpicker-cmyk-container {
+  vertical-align: bottom;
+}
+/* line 64, ui.scss */
+#color-picker.form-default .ui-colorpicker-alpha-container {
+  padding-top: 10px;
+}
+/* line 65, ui.scss */
+#color-picker.form-default .ui-colorpicker-swatchesswitcher-container select {
+  width: 132px;
+}
+/* line 66, ui.scss */
+#color-picker.form-default .ui-colorpicker-swatches-container {
+  padding-top: 5px;
+}
+/* line 67, ui.scss */
+#color-picker.form-default .ui-colorpicker-formats-container {
+  vertical-align: bottom;
+}
+/* line 71, ui.scss */
+#color-picker.form-largePalette .ui-colorpicker-swatchesswitcher-container select {
+  max-width: 288px;
+}
+/* line 72, ui.scss */
+#color-picker.form-largePalette .ui-colorpicker > table > tbody > tr:nth-of-type(3) {
+  height: 14px;
+}
+/* line 73, ui.scss */
+#color-picker.form-largePalette .ui-colorpicker-swatches-container {
+  padding-top: 0;
+}
+/* line 74, ui.scss */
+#color-picker.form-largePalette .ui-colorpicker-formats-container {
+  vertical-align: bottom;
+}
+/* line 78, ui.scss */
+#color-picker.form-simple .ui-colorpicker-formats-container {
+  vertical-align: bottom;
+}
+/* line 82, ui.scss */
+#color-picker.form-compact .ui-colorpicker-hsv-container {
+  padding-top: 5px;
+}
+/* line 83, ui.scss */
+#color-picker.form-compact .ui-colorpicker-alpha-container {
+  padding-top: 6px;
+}
+/* line 87, ui.scss */
+#color-picker.form-compact2 .ui-colorpicker-hsv-container {
+  padding-top: 3px;
+}
+/* line 88, ui.scss */
+#color-picker.form-compact2 .ui-colorpicker-alpha-container {
+  padding-top: 6px;
+}
+/* line 92, ui.scss */
+#color-picker.form-byPalette .ui-colorpicker-preview-container {
+  width: 102px;
+}
+/* line 93, ui.scss */
+#color-picker.form-byPalette .ui-colorpicker-swatchesswitcher-container select {
+  max-width: 180px;
+}

@@ -1,0 +1,71 @@
+@import "compass";
+@import "common";
+
+.ui-colorpicker-formats {
+  box-sizing: border-box;
+  width: 21em;
+  border: 1px solid #c5c5c5; // copy form .ui-widget-content
+  padding: 3px;
+
+  // for box to right
+  display: inline-block;
+  text-align: left;
+
+  & > select {
+    box-sizing: border-box;
+    width: 100%;
+  }
+}
+
+.ui-colorpicker table td.ui-colorpicker-formats-container {
+  text-align: right;
+}
+
+.ui-colorpicker-formats-frame {
+  margin: 2px 0;
+}
+
+.ui-colorpicker-formats-options {
+  margin-left: -0.5em; // for label{margin-left}
+  padding: 2px;
+  white-space: normal; // to avoid `nowrap` in .ui-colorpicker
+  font-size: 0.9em;
+
+  display: none;
+  &.state-active { display: block; }
+
+  label {
+    display: inline-block;
+    white-space: nowrap;
+    margin-left: 0.5em;
+    cursor: pointer;
+    select { margin-left: 3px; }
+  }
+
+  input { vertical-align: middle; }
+}
+
+.ui-colorpicker-formats-text {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #d5f0ff;
+  border: 1px inset #a5cde0;
+  padding: 2px 1px;
+}
+
+.ui-colorpicker table .ui-colorpicker-formats-text { // over point than .ui*
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.ui-colorpicker-formatsfooter {
+  text-align: right;
+
+  button {
+    width: 7em;
+    &:first-child { margin-right: 3px; }
+  }
+}
+
+.ui-colorpicker table td.ui-colorpicker-formatsfooter-container { // over point than .ui*
+  vertical-align: bottom;
+}
