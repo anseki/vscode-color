@@ -1,6 +1,6 @@
 {
   "name": "vscode-color",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "displayName": "Color Picker",
   "description": "Helper with GUI to generate color codes such as CSS color notations.",
   "keywords": [
@@ -28,7 +28,7 @@
     "vscode": "^0.10.1"
   },
   "dependencies": {
-    "process-bridge": "^0.1.9",
+    "process-bridge": "^0.1.10",
     "electron-prebuilt": "^0.36.5",
     "js-yaml": "^3.5.3",
     "comma-separated-values": "^3.6.4"
