@@ -2,7 +2,7 @@
 
 Helper with GUI to generate color codes such as CSS color notations.
 
-A dialog box is shown by pressing `Alt+C P` keys or command `Pick Color`. If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing.
+A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing.
 
 ![s-01](s-01.gif)
 
@@ -12,6 +12,16 @@ A dialog box is shown by pressing `Alt+C P` keys or command `Pick Color`. If a c
 * Multiple cursors supported.
 
 ![s-02](s-02.gif)
+
+## Install
+
+You need [Node.js](https://nodejs.org/) installed and available in your `$PATH`.  
+Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".
+
+## Usage
+
+A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing. Multiple cursors also supported.  
+You can see tooltip information for some controls in the dialog box by hovering a mouse on those.
 
 ## Options
 
