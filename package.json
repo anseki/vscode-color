@@ -71,7 +71,7 @@
         },
         "colorHelper.storeDir": {
           "type": "string",
-          "default": null,
+          "default": "",
           "description": "Path to directory that contains your color palettes."
         },
         "colorHelper.resident": {
