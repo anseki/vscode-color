@@ -34,9 +34,9 @@ A string is parsed as a supported notation.
 For example:
 
 ```yaml
-- blue                  # CSS named color
-- rgb(237, 10, 63, 0.8) # RGB function
-- "#11aabb"             # RGB-Hex (It is quoted to avoid `#` is interpreted as a comment.)
+- blue                   # CSS named color
+- rgba(237, 10, 63, 0.8) # RGB function
+- "#11aabb"              # RGB-Hex (It is quoted to avoid `#` is interpreted as a comment.)
 ```
 
 ### Sequence
