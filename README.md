@@ -20,7 +20,20 @@ Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and t
 
 ## Usage
 
-A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing. Multiple cursors also supported.  
+A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`.  
+If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing. The color notation is recognized even if it includes line-breaks and comments.  
+For example:
+
+```css
+background-color: hsl(
+  136,
+  77%, /* When it is blurred, change to 32% */
+  84%
+  );
+```
+
+Multiple cursors also supported.
+
 You can see tooltip information for some controls in the dialog box by hovering a mouse on those.
 
 ## Options
