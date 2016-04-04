@@ -29,9 +29,12 @@ function parseMessageLines(lines, cb) { // cb(requestId, message)
 }
 
 console.log('Input value to send or `q` to quit.');
-console.log('\'\' : empty value\n<value>/f:<form> :\n' +
-  Object.keys(FORM_KEYS).map(key => `  ${key}: ${FORM_KEYS[key]}`).join('') +
-  '\n<value>/s:<storeDir>');
+console.log('\'\' : empty value\n' +
+  '<value1>@<value2>@.../c:<formatId> : convert\n' +
+  '<value>/f:<form> :\n' +
+    Object.keys(FORM_KEYS).map(key => `  ${key}: ${FORM_KEYS[key]}`).join('') + '\n' +
+  '<value>/s:<storeDir>');
+
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', chunk => {
@@ -42,8 +45,12 @@ process.stdin.on('data', chunk => {
         process.exit(); // eslint-disable-line no-process-exit
       }, 500);
     } else {
-      let request = {value: value}, matches;
-      if ((matches = /^(.*?)\/f:(.+)$/.exec(value))) {
+      let request = {value: value, command: 'pick'}, matches;
+      if ((matches = /^(.*?)\/c:(.+)$/.exec(value))) {
+        request.value = matches[1].split('@');
+        request.formatId = matches[2];
+        request.command = 'convert';
+      } else if ((matches = /^(.*?)\/f:(.+)$/.exec(value))) {
         request.value = matches[1];
         request.form = FORM_KEYS[matches[2]];
       } else if ((matches = /^(.*?)\/s:(.+)$/.exec(value))) {
