@@ -15,6 +15,12 @@ module.exports = grunt => {
 
   var assets = [], protectedText = [];
 
+  function productSrc(src) {
+    return src
+      .replace(/[^\n]*\[DEBUG\/\][^\n]*\n?/g, '')
+      .replace(/[^\n]*\[DEBUG\][\s\S]*?\[\/DEBUG\][^\n]*\n?/g, '');
+  }
+
   function minCss(content) {
     return (new CleanCSS({keepSpecialComments: 0})).minify(content).styles;
   }
