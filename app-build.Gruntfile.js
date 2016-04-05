@@ -9,11 +9,28 @@ module.exports = grunt => {
     htmlclean = require('htmlclean'),
     CleanCSS = require('clean-css'),
 
-    SRC_DIR_PATH = pathUtil.join(__dirname, 'lib/app'),
-    WORK_DIR_PATH = pathUtil.join(__dirname, 'temp/' + pathUtil.basename(SRC_DIR_PATH)),
-    MAIN_HTML_PATH = pathUtil.join(SRC_DIR_PATH, 'ui.html');
+    PACKAGE_ROOT_PATH = __dirname,
 
-  var assets = [], protectedText = [];
+    SRC_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'lib/app'),
+    WORK_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'temp/app'),
+
+    SRC_ASSETS = filelist.getSync(SRC_DIR_PATH, {
+      filter: stats =>
+        stats.isFile() &&
+        !/^\./.test(stats.name) &&
+        !/\.scss$/.test(stats.name) &&
+        !/\.html$/.test(stats.name) &&
+        !/\.svg$/.test(stats.name),
+      listOf: 'fullPath'
+    }),
+
+    UNPACK_ASSETS = [
+      'node_modules/jquery/dist/jquery.min.js'
+    ].map(path => pathUtil.join(PACKAGE_ROOT_PATH, path)),
+
+    EXT_ASSETS = [];
+
+  var excludeSrcAssets = [], copiedAssets = [], protectedText = [];
 
   function productSrc(src) {
     return src
@@ -25,10 +42,19 @@ module.exports = grunt => {
     return (new CleanCSS({keepSpecialComments: 0})).minify(content).styles;
   }
 
+  function minJs(content) { // simple minify
+    return content
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .replace(/((?:^|\n)[^\n\'\"\`]*?)\/\/[^\n]*(?=\n|$)/g, '$1') // safe
+      .replace(/(^|\n)[ \t]+/g, '$1')
+      .replace(/[ \t]+($|\n)/g, '$1')
+      .replace(/\n{2,}/g, '\n');
+  }
+
   function addProtectedText(text) {
     if (typeof text !== 'string' || text === '') { return ''; }
     protectedText.push(text);
-    return '\f' + (protectedText.length - 1) + '\x07';
+    return `\f${protectedText.length - 1}\x07`;
   }
 
   // Redo String#replace until target is not found
@@ -51,7 +77,7 @@ module.exports = grunt => {
     clean: {
       workDir: {
         options: {force: true},
-        src: [WORK_DIR_PATH + '/**/*']
+        src: [`${WORK_DIR_PATH}/**/*`]
       }
     },
 
@@ -59,84 +85,131 @@ module.exports = grunt => {
       packHtml: {
         options: {
           handlerByContent: content => {
-            var packedFiles = {};
-
             function getContent(path) {
               var content;
-              path = pathUtil.join(SRC_DIR_PATH, path);
-
               if (path.indexOf(SRC_DIR_PATH) !== 0) {
-                grunt.fail.fatal('File doesn\'t exist in src dir: ' + path);
+                grunt.log.writeln(`File doesn't exist in src dir: ${path}`);
               } else if (!fs.existsSync(path)) {
-                grunt.fail.fatal('File doesn\'t exist: ' + path);
+                grunt.fail.fatal(`File doesn't exist: ${path}`);
               }
-              packedFiles[path] = true;
-
               content = fs.readFileSync(path, {encoding: 'utf8'}).trim();
               if (/\f|\x07/.test(content)) {
-                grunt.fail.fatal('\\f or \\x07 that is used as marker is included: ' + path);
+                grunt.fail.fatal(`\\f or \\x07 that is used as marker is included: ${path}`);
               }
               return content;
             }
 
-            function packCss(str, path) {
-              var content = getContent(path)
-                .replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '')
-                .replace(/^\s*@charset\s+[^;]+;/gm, '');
-              if (!/\.min\.css$/.test(path)) {
-                content = minCss(content);
+            function packCss(s, left, path, right) {
+              function getCssContent(path) {
+                return getContent(path).replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '');
               }
-              return '<style>' + addProtectedText(content) + '</style>';
+
+              path = pathUtil.join(SRC_DIR_PATH, path);
+              excludeSrcAssets.push(path);
+              if (UNPACK_ASSETS.indexOf(path) < 0) {
+                let content = getCssContent(path).replace(/^\s*@charset\s+[^;]+;/gm, '');
+                if (!/\.min\.css$/.test(path)) { content = minCss(productSrc(content)); }
+                return `<style>${addProtectedText(content)}</style>`;
+              } else {
+                let basename = pathUtil.basename(path);
+                if (/\.min\.css$/.test(path)) {
+                  if (copiedAssets.indexOf(path) < 0) { copiedAssets.push(path); }
+                } else {
+                  basename = basename.replace(/\.css$/, '.min.css');
+                  fs.writeFileSync(pathUtil.join(WORK_DIR_PATH, basename),
+                    minCss(productSrc(getCssContent(path))));
+                }
+                return addProtectedText(`${left}./${basename}${right}`);
+              }
             }
 
-            function packJs(str, path) {
-              var content = getContent(path)
-                .replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '')
-                .replace(/\s*\n\s*\/\/[^\n]*\s*$/, '')
-                .replace(/^[;\s]+/, '')
-                .replace(/[;\s]*$/, ';');
-              return '<script>' + addProtectedText(content) + '</script>';
+            function packJs(s, left, path, right) {
+              function getJsContent(path) {
+                return getContent(path)
+                  .replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '')
+                  .replace(/\s*\n\s*\/\/[^\n]*\s*$/, '')
+                  .replace(/^[;\s]+/, '')
+                  .replace(/[;\s]*$/, ';');
+              }
+
+              path = pathUtil.join(SRC_DIR_PATH, path);
+              excludeSrcAssets.push(path);
+              if (UNPACK_ASSETS.indexOf(path) < 0) {
+                let content = getJsContent(path);
+                if (!/\.min\.js$/.test(path)) { content = minJs(productSrc(content)); }
+                return `<script>${addProtectedText(content)}</script>`;
+              } else {
+                let basename = pathUtil.basename(path);
+                if (/\.min\.js$/.test(path)) {
+                  if (copiedAssets.indexOf(path) < 0) { copiedAssets.push(path); }
+                } else {
+                  basename = basename.replace(/\.js$/, '.min.js');
+                  fs.writeFileSync(pathUtil.join(WORK_DIR_PATH, basename),
+                    minJs(productSrc(getJsContent(path))));
+                }
+                return addProtectedText(`${left}./${basename}${right}`);
+              }
             }
 
             if (/\f|\x07/.test(content)) {
-              grunt.fail.fatal('\\f or \\x07 that is used as marker is included: ' + MAIN_HTML_PATH);
+              grunt.fail.fatal('\\f or \\x07 that is used as marker is included');
             }
 
-            content = htmlclean(content)
-              .replace(/<link\b[^>]*href="(.+?)"[^>]*>/g, packCss)
-              .replace(/<script\b[^>]*src="(.+?)"[^>]*><\/script>/g, packJs)
+            content = htmlclean(productSrc(content))
+              .replace(/(<link\b[^>]*href=")(.+?)("[^>]*>)/g, packCss)
+              .replace(/(<script\b[^>]*src=")(.+?)("[^>]*><\/script>)/g, packJs)
+              .replace(/(require\(')(.+?)('\))/g, packJs) // must be included in UNPACK_ASSETS
               .replace(/<\/style><style>/g, '')
               .replace(/<\/script><script>/g, '');
             // Restore protected texts
-            content = replaceComplete(content, /\f(\d+)\x07/g, (s, i) => protectedText[i] || '');
-
-            assets = filelist.getSync(SRC_DIR_PATH, {
-              filter: stats => !( // list of excluded items
-                  !stats.isFile() ||
-                  /^\./.test(stats.name) ||
-                  /\.scss$/.test(stats.name) ||
-                  stats.fullPath === MAIN_HTML_PATH ||
-                  stats.name === 'tr-bg.svg' ||
-                  packedFiles[stats.fullPath]
-                ),
-              listOf: 'fullPath'
-            }).map(srcPath => ({
-              src: srcPath,
-              dest: pathUtil.join(WORK_DIR_PATH, pathUtil.relative(SRC_DIR_PATH, srcPath))
-            }));
-            grunt.config.merge({
-              copy: {
-                assets: {
-                  files: assets
-                }
-              }
-            });
-
-            return content;
+            return replaceComplete(content, /\f(\d+)\x07/g, (s, i) => protectedText[i] || '');
           }
         },
-        src: MAIN_HTML_PATH,
-        dest: pathUtil.join(WORK_DIR_PATH, pathUtil.relative(SRC_DIR_PATH, MAIN_HTML_PATH))
+        expand: true,
+        cwd: `${SRC_DIR_PATH}/`,
+        src: '**/*.html',
+        dest: `${WORK_DIR_PATH}/`
+      },
+
+      copyFiles: {
+        options: {
+          handlerByTask: () => {
+            var files = SRC_ASSETS
+              .filter(path => excludeSrcAssets.indexOf(path) < 0)
+              .map(srcPath => ({
+                src: srcPath,
+                dest: pathUtil.join(WORK_DIR_PATH, pathUtil.relative(SRC_DIR_PATH, srcPath))
+              }))
+              .concat(copiedAssets.map(srcPath => ({
+                src: srcPath,
+                dest: pathUtil.join(WORK_DIR_PATH, pathUtil.basename(srcPath))
+              })))
+              .reduce((assets, file) => {
+                // /(?<!\.min)\.(?:css|js|svg)$/
+                if (/\.(?:css|js|svg)$/.test(file.src) && !/\.min\.(?:css|js|svg)$/.test(file.src)) {
+                  // files that are not referred from html
+                  let content = fs.readFileSync(file.src, {encoding: 'utf8'}).trim();
+                  if (/\.css$/.test(file.src)) {
+                    content = minCss(productSrc(content.replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '')));
+                  } else if (/\.js$/.test(file.src)) {
+                    content = minJs(productSrc(content));
+                  } else { // svg
+                    content = htmlclean(content);
+                  }
+                  fs.writeFileSync(file.dest, content);
+                } else {
+                  assets.push(file);
+                }
+                return assets;
+              }, [])
+              .concat(EXT_ASSETS);
+            // files.push({
+            //   src: PACKAGE_JSON_PATH,
+            //   dest: pathUtil.join(WORK_DIR_PATH, 'package.json')
+            // });
+            grunt.config.merge({copy: {copyFiles: {files: files}}});
+          }
+        }
       }
     }
   });
@@ -148,6 +221,7 @@ module.exports = grunt => {
   grunt.registerTask('default', [
     'clean:workDir',
     'taskHelper:packHtml',
-    'copy:assets'
+    'taskHelper:copyFiles',
+    'copy:copyFiles'
   ]);
 };

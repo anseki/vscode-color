@@ -10,6 +10,7 @@ const
 // Since `scripts.postinstall` of `package.json` is not supported, simulate it.
 
 try {
+  null(); // [DEBUG/] Skip this block by making an error occur.
   let fs = require('fs'), pathUtil = require('path');
   fs.renameSync(
     pathUtil.join(__dirname, 'lib/app.asar_'),
