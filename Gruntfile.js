@@ -11,16 +11,21 @@ module.exports = grunt => {
 
     PACKAGE_ROOT_PATH = __dirname,
 
-    SRC_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'lib/app'),
-    WORK_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'temp/app'),
+    SRC_APP_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'lib/app'),
+    WORK_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'temp/vsce'),
+    WORK_APP_DIR_PATH = pathUtil.join(WORK_DIR_PATH, 'app'),
 
-    SRC_ASSETS = filelist.getSync(SRC_DIR_PATH, {
+    PACKAGE_JSON_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'package.json'),
+    PACKAGE_JSON = JSON.parse(fs.readFileSync(PACKAGE_JSON_PATH)),
+
+    SRC_ASSETS = filelist.getSync(SRC_APP_DIR_PATH, {
       filter: stats =>
         stats.isFile() &&
         !/^\./.test(stats.name) &&
         !/\.scss$/.test(stats.name) &&
         !/\.html$/.test(stats.name) &&
-        !/\.svg$/.test(stats.name),
+        !/\.svg$/.test(stats.name) &&
+        stats.name !== 'package.json',
       listOf: 'fullPath'
     }),
 
@@ -87,7 +92,7 @@ module.exports = grunt => {
           handlerByContent: content => {
             function getContent(path) {
               var content;
-              if (path.indexOf(SRC_DIR_PATH) !== 0) {
+              if (path.indexOf(SRC_APP_DIR_PATH) !== 0) {
                 grunt.log.writeln(`File doesn't exist in src dir: ${path}`);
               } else if (!fs.existsSync(path)) {
                 grunt.fail.fatal(`File doesn't exist: ${path}`);
@@ -104,7 +109,7 @@ module.exports = grunt => {
                 return getContent(path).replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '');
               }
 
-              path = pathUtil.join(SRC_DIR_PATH, path);
+              path = pathUtil.join(SRC_APP_DIR_PATH, path);
               excludeSrcAssets.push(path);
               if (UNPACK_ASSETS.indexOf(path) < 0) {
                 let content = getCssContent(path).replace(/^\s*@charset\s+[^;]+;/gm, '');
@@ -116,7 +121,7 @@ module.exports = grunt => {
                   if (copiedAssets.indexOf(path) < 0) { copiedAssets.push(path); }
                 } else {
                   basename = basename.replace(/\.css$/, '.min.css');
-                  fs.writeFileSync(pathUtil.join(WORK_DIR_PATH, basename),
+                  fs.writeFileSync(pathUtil.join(WORK_APP_DIR_PATH, basename),
                     minCss(productSrc(getCssContent(path))));
                 }
                 return addProtectedText(`${left}./${basename}${right}`);
@@ -132,7 +137,7 @@ module.exports = grunt => {
                   .replace(/[;\s]*$/, ';');
               }
 
-              path = pathUtil.join(SRC_DIR_PATH, path);
+              path = pathUtil.join(SRC_APP_DIR_PATH, path);
               excludeSrcAssets.push(path);
               if (UNPACK_ASSETS.indexOf(path) < 0) {
                 let content = getJsContent(path);
@@ -144,7 +149,7 @@ module.exports = grunt => {
                   if (copiedAssets.indexOf(path) < 0) { copiedAssets.push(path); }
                 } else {
                   basename = basename.replace(/\.js$/, '.min.js');
-                  fs.writeFileSync(pathUtil.join(WORK_DIR_PATH, basename),
+                  fs.writeFileSync(pathUtil.join(WORK_APP_DIR_PATH, basename),
                     minJs(productSrc(getJsContent(path))));
                 }
                 return addProtectedText(`${left}./${basename}${right}`);
@@ -166,9 +171,9 @@ module.exports = grunt => {
           }
         },
         expand: true,
-        cwd: `${SRC_DIR_PATH}/`,
+        cwd: `${SRC_APP_DIR_PATH}/`,
         src: '**/*.html',
-        dest: `${WORK_DIR_PATH}/`
+        dest: `${WORK_APP_DIR_PATH}/`
       },
 
       copyFiles: {
@@ -178,11 +183,11 @@ module.exports = grunt => {
               .filter(path => excludeSrcAssets.indexOf(path) < 0)
               .map(srcPath => ({
                 src: srcPath,
-                dest: pathUtil.join(WORK_DIR_PATH, pathUtil.relative(SRC_DIR_PATH, srcPath))
+                dest: pathUtil.join(WORK_APP_DIR_PATH, pathUtil.relative(SRC_APP_DIR_PATH, srcPath))
               }))
               .concat(copiedAssets.map(srcPath => ({
                 src: srcPath,
-                dest: pathUtil.join(WORK_DIR_PATH, pathUtil.basename(srcPath))
+                dest: pathUtil.join(WORK_APP_DIR_PATH, pathUtil.basename(srcPath))
               })))
               .reduce((assets, file) => {
                 // /(?<!\.min)\.(?:css|js|svg)$/
@@ -210,6 +215,39 @@ module.exports = grunt => {
             grunt.config.merge({copy: {copyFiles: {files: files}}});
           }
         }
+      },
+
+      appPackageJson: {
+        options: {
+          handlerByContent: content => {
+            var packageJson = JSON.parse(content);
+            packageJson.version = PACKAGE_JSON.version;
+            return JSON.stringify(packageJson);
+          }
+        },
+        src: `${SRC_APP_DIR_PATH}/package.json`,
+        dest: `${WORK_APP_DIR_PATH}/package.json`
+      }
+    },
+
+    copy: {
+      extensionFiles: {
+        expand: true,
+        cwd: `${PACKAGE_ROOT_PATH}/`,
+        src: [
+          'package.json',
+          'icon.png',
+          'README.md',
+          'lib/*.*',
+          'node_modules/process-bridge/**',
+          'palettes/**'
+        ],
+        dest: `${WORK_DIR_PATH}/`,
+        options: {
+          process: (content, path) => {
+            return /\.js$/.test(path) ? minJs(productSrc(content)) : content;
+          }
+        }
       }
     }
   });
@@ -222,6 +260,8 @@ module.exports = grunt => {
     'clean:workDir',
     'taskHelper:packHtml',
     'taskHelper:copyFiles',
-    'copy:copyFiles'
+    'copy:copyFiles',
+    'taskHelper:appPackageJson',
+    'copy:extensionFiles'
   ]);
 };
