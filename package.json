@@ -45,9 +45,6 @@
     "stats-filelist": "^0.1.1",
     "vscode": "0.10.x"
   },
-  "scripts": {
-    "vscode:prepublish": "node -e \"require('fs').writeFileSync('extension.js',require('fs').readFileSync('extension_.js',{encoding: 'utf8'}))\""
-  },
   "contributes": {
     "commands": [
       {

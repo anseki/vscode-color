@@ -5,7 +5,7 @@ const
   packageInfo = require('./package'),
   main = require(packageInfo.extensionMain);
 
-// [postinstall]
+// 'avlid minJs' [postinstall]
 
 // Since `scripts.postinstall` of `package.json` is not supported, simulate it.
 
@@ -18,10 +18,10 @@ try {
 
   fs.writeFileSync(__filename,
     fs.readFileSync(__filename, {encoding: 'utf8'})
-      .replace(/\/\/ *\[postinstall\][\s\S]*?\/\/ *\[\/postinstall\]\s*/, ''));
+      .replace(/\/\/[^\n]*?\[postinstall\][\s\S]*?\/\/[^\n]*?\[\/postinstall\][^\n]*\n\s*/, ''));
 } catch (error) { /* ignore */ }
 
-// [/postinstall]
+// 'avlid minJs' [/postinstall]
 
 exports.activate = context => {
   packageInfo.contributes.commands.forEach(commandReg => {

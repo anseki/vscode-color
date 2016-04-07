@@ -227,6 +227,16 @@ module.exports = grunt => {
         },
         src: `${SRC_APP_DIR_PATH}/package.json`,
         dest: `${WORK_APP_DIR_PATH}/package.json`
+      },
+
+      extensionJs: {
+        options: {
+          handlerByContent: content => {
+            return minJs(productSrc(content));
+          }
+        },
+        src: `${PACKAGE_ROOT_PATH}/extension_.js`,
+        dest: `${WORK_DIR_PATH}/extension.js`
       }
     },
 
