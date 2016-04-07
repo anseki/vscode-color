@@ -10,10 +10,11 @@ module.exports = grunt => {
     CleanCSS = require('clean-css'),
 
     PACKAGE_ROOT_PATH = __dirname,
+    TEMP_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'temp'),
 
     SRC_APP_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'lib/app'),
-    WORK_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'temp/vsce'),
-    WORK_APP_DIR_PATH = pathUtil.join(WORK_DIR_PATH, 'app'),
+    WORK_VSCE_PATH = pathUtil.join(TEMP_PATH, 'vsce'),
+    WORK_APP_DIR_PATH = pathUtil.join(WORK_VSCE_PATH, 'app'),
 
     PACKAGE_JSON_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'package.json'),
     PACKAGE_JSON = JSON.parse(fs.readFileSync(PACKAGE_JSON_PATH)),
@@ -49,8 +50,8 @@ module.exports = grunt => {
 
   function minJs(content) { // simple minify
     return content
-      .replace(/\/\*[\s\S]*?\*\//g, '')
-      .replace(/((?:^|\n)[^\n\'\"\`]*?)\/\/[^\n]*(?=\n|$)/g, '$1') // safe
+      .replace(/\/\*[^\[\]]*?\*\//g, '')
+      .replace(/((?:^|\n)[^\n\'\"\`]*?)\/\/[^\n\[\]]*(?=\n|$)/g, '$1') // safe
       .replace(/(^|\n)[ \t]+/g, '$1')
       .replace(/[ \t]+($|\n)/g, '$1')
       .replace(/\n{2,}/g, '\n');
@@ -82,7 +83,7 @@ module.exports = grunt => {
     clean: {
       workDir: {
         options: {force: true},
-        src: [`${WORK_DIR_PATH}/**/*`]
+        src: [`${WORK_VSCE_PATH}/**/*`]
       }
     },
 
@@ -236,7 +237,7 @@ module.exports = grunt => {
           }
         },
         src: `${PACKAGE_ROOT_PATH}/extension_.js`,
-        dest: `${WORK_DIR_PATH}/extension.js`
+        dest: `${WORK_VSCE_PATH}/extension.js`
       }
     },
 
@@ -252,7 +253,7 @@ module.exports = grunt => {
           'node_modules/process-bridge/**',
           'palettes/**'
         ],
-        dest: `${WORK_DIR_PATH}/`,
+        dest: `${WORK_VSCE_PATH}/`,
         options: {
           process: (content, path) => {
             return /\.js$/.test(path) ? minJs(productSrc(content)) : content;
@@ -260,6 +261,42 @@ module.exports = grunt => {
         }
       }
     }
+  });
+
+  grunt.registerTask('asar', function() {
+    const asar = require('asar'),
+      rimraf = require('rimraf'),
+      ASAR_PATH = `${WORK_VSCE_PATH}/lib/app.asar`;
+    var done = this.async(); // eslint-disable-line no-invalid-this
+
+    asar.createPackage(`${WORK_APP_DIR_PATH}/`, ASAR_PATH, error => {
+      var asarList;
+      if (error) {
+        done(error);
+      } else {
+
+        asarList = asar.listPackage(ASAR_PATH);
+        fs.renameSync(ASAR_PATH, `${ASAR_PATH}_`);
+        rimraf(WORK_APP_DIR_PATH, {glob: false}, error => {
+          if (error) {
+            done(error);
+          } else {
+            let list = filelist.getSync(WORK_VSCE_PATH)
+              .reduce((list, stats) => {
+                if (stats.isFile()) {
+                  list.push(pathUtil.relative(WORK_VSCE_PATH, stats.fullPath));
+                }
+                return list;
+              }, []);
+
+            fs.writeFileSync(pathUtil.join(TEMP_PATH, `publish-files-${PACKAGE_JSON.version}.txt`),
+              `asar l app.asar\n\n${asarList.join('\n')}\n\n` +
+              `vsce ls\n\n${list.join('\n')}\n`);
+            done();
+          }
+        });
+      }
+    });
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -273,6 +310,7 @@ module.exports = grunt => {
     'copy:copyFiles',
     'taskHelper:appPackageJson',
     'copy:extensionFiles',
-    'taskHelper:extensionJs'
+    'taskHelper:extensionJs',
+    'asar'
   ]);
 };
