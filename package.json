@@ -40,6 +40,7 @@
     "grunt-contrib-copy": "^0.8.2",
     "grunt-task-helper": "^0.3.7",
     "htmlclean": "^2.7.7",
+    "jquery": "^2.2.2",
     "stats-filelist": "^0.1.1",
     "vscode": "0.10.x"
   },
