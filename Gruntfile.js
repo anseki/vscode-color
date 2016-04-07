@@ -272,6 +272,7 @@ module.exports = grunt => {
     'taskHelper:copyFiles',
     'copy:copyFiles',
     'taskHelper:appPackageJson',
-    'copy:extensionFiles'
+    'copy:extensionFiles',
+    'taskHelper:extensionJs'
   ]);
 };
