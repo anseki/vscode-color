@@ -34,7 +34,7 @@ module.exports = grunt => {
       'node_modules/jquery/dist/jquery.min.js'
     ].map(path => pathUtil.join(PACKAGE_ROOT_PATH, path)),
 
-    EXT_ASSETS = [];
+    PACK_MODULES = ['process-bridge'];
 
   var excludeSrcAssets = [], copiedAssets = [], protectedText = [];
 
@@ -77,6 +77,27 @@ module.exports = grunt => {
       text = text.replace(reg, fncWrap);
     }
     return text;
+  }
+
+  function isExists(path) {
+    try {
+      fs.accessSync(path); // only check existence.
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function mkdirP(path) { // mkdir -p
+    path.split(/\/|\\/).reduce((parents, dir) => {
+      var path = pathUtil.resolve((parents += dir + pathUtil.sep)); // normalize
+      if (!isExists(path)) {
+        fs.mkdirSync(path);
+      } else if (!fs.statSync(path).isDirectory()) {
+        throw new Error('Non directory already exists: ' + path);
+      }
+      return parents;
+    }, '');
   }
 
   grunt.initConfig({
@@ -208,7 +229,25 @@ module.exports = grunt => {
                 }
                 return assets;
               }, [])
-              .concat(EXT_ASSETS);
+              // Since vsce checks modules even if `.vscodeignore` is written, copy dummy packages.
+              .concat(Object.keys(PACKAGE_JSON.dependencies).reduce((list, dependency) => {
+                if (PACK_MODULES.indexOf(dependency) >= 0) {
+                  list.push({
+                    expand: true,
+                    cwd: PACKAGE_ROOT_PATH,
+                    src: `node_modules/${dependency}/**`,
+                    dest: `${WORK_VSCE_PATH}/`
+                  });
+                } else {
+                  let packageJson =
+                      require(`${PACKAGE_ROOT_PATH}/node_modules/${dependency}/package.json`),
+                    destPath = pathUtil.join(WORK_VSCE_PATH, 'node_modules', dependency, 'package.json');
+                  delete packageJson.dependencies;
+                  mkdirP(pathUtil.dirname(destPath));
+                  fs.writeFileSync(destPath, JSON.stringify(packageJson));
+                }
+                return list;
+              }, []));
             // files.push({
             //   src: PACKAGE_JSON_PATH,
             //   dest: pathUtil.join(WORK_DIR_PATH, 'package.json')
@@ -238,6 +277,18 @@ module.exports = grunt => {
         },
         src: `${PACKAGE_ROOT_PATH}/extension_.js`,
         dest: `${WORK_VSCE_PATH}/extension.js`
+      },
+
+      vscodeIgnore: {
+        options: {
+          handlerByTask: () => {
+            fs.writeFileSync(pathUtil.join(WORK_VSCE_PATH, '.vscodeignore'),
+              Object.keys(PACKAGE_JSON.dependencies)
+                .filter(dependency => PACK_MODULES.indexOf(dependency) < 0)
+                .map(dependency => `node_modules/${dependency}/**\n`)
+                .join(''));
+          }
+        }
       }
     },
 
@@ -247,10 +298,8 @@ module.exports = grunt => {
         cwd: `${PACKAGE_ROOT_PATH}/`,
         src: [
           'package.json',
-          'icon.png',
           'README.md',
           'lib/*.*',
-          'node_modules/process-bridge/**',
           'palettes/**'
         ],
         dest: `${WORK_VSCE_PATH}/`,
@@ -259,6 +308,16 @@ module.exports = grunt => {
             return /\.js$/.test(path) ? minJs(productSrc(content)) : content;
           }
         }
+      },
+
+      // copy.options breaks binary files.
+      binFiles: {
+        expand: true,
+        cwd: `${PACKAGE_ROOT_PATH}/`,
+        src: [
+          'icon.png'
+        ],
+        dest: `${WORK_VSCE_PATH}/`
       }
     }
   });
@@ -310,7 +369,9 @@ module.exports = grunt => {
     'copy:copyFiles',
     'taskHelper:appPackageJson',
     'copy:extensionFiles',
+    'copy:binFiles',
     'taskHelper:extensionJs',
-    'asar'
+    'asar',
+    'taskHelper:vscodeIgnore'
   ]);
 };
