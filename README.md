@@ -1,13 +1,14 @@
 # Color Picker for VS Code
 
-Helper with GUI to generate color codes such as CSS color notations.
+Helper with GUI to generate color codes such as CSS color notations.  
+And, a command [`Convert Color`](#convert-color) to change the color notation.
 
-A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing.
+A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a cursor is positioned on a string that is color notation at that time, that string is selected as target for editing.
 
 ![s-01](s-01.gif)
 
-* Supported color spaces for editing the color: HSB (HSV), RGB, Lab, and CMYK. With alpha channel.
-* Supported color notations for outputting the color: `hsb()`/`hsba()`, `hsl()`/`hsla()`, `hwb()`, `rgb()`/`rgba()`, RGB-Hex 3/4/6/8 digits, CSS Named Color, `device-cmyk()` and `gray()`.
+* Supported color spaces to edit the color: HSB (HSV), RGB, Lab, and CMYK. With alpha channel.
+* Supported color notations to output the color: `hsb()`/`hsba()`, `hsl()`/`hsla()`, `hwb()`, `rgb()`/`rgba()`, RGB-Hex 3/4/6/8 digits, CSS Named Color, `device-cmyk()` and `gray()`.
 * Custom color palettes supported.
 * Multiple cursors supported.
 
@@ -21,7 +22,7 @@ Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and t
 ## Usage
 
 A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`.  
-If a cursor is positioned on a text that is color notation at that time, that text is selected as target for editing. The color notation is recognized even if it includes line-breaks and comments.  
+If a cursor is positioned on a string that is color notation at that time, that string is selected as target for editing. The color notation is recognized even if it includes line-breaks and comments.  
 For example:
 
 ```css
@@ -35,6 +36,18 @@ background-color: hsl(
 Multiple cursors also supported.
 
 You can see tooltip information for some controls in the dialog box by hovering a mouse on those.
+
+### Convert Color
+
+When a cursor or multiple cursors are positioned on strings that are color notation, press `Alt + C C` keys or run a command `Convert Color`.  
+Then a list of color notations is shown. The each target string is converted to a same color with the notation you chose.
+
+![s-03](s-03.gif)
+
+It is converted with the notation you chose and current state of `Pick Color` dialog box.  
+For example, you turned on an `UC` (upper-case) option of `RGB-Hex` in the dialog box, and you invoked the command `Convert Color` with `white` as a target and a notation `RGB-Hex`, then that `white` is converted to `#FFF`. If you turned off that option, it is converted to `#fff`.
+
+![s-04](s-04.png)
 
 ## Options
 
