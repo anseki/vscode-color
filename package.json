@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "comma-separated-values": "^3.6.4",
-    "electron-prebuilt": "^0.37.4",
+    "electron-prebuilt": "^0.37.5",
     "js-yaml": "^3.5.5",
     "process-bridge": "^0.2.0"
   },
