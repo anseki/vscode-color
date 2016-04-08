@@ -51,7 +51,7 @@ module.exports = grunt => {
   function minJs(content) { // simple minify
     return content
       .replace(/\/\*[^\[\]]*?\*\//g, '')
-      .replace(/((?:^|\n)[^\n\'\"\`]*?)\/\/[^\n\[\]]*(?=\n|$)/g, '$1') // safe
+      .replace(/((?:^|\n)[^\n\'\"\`\/]*?)\/\/[^\n\[\]]*(?=\n|$)/g, '$1') // safe
       .replace(/(^|\n)[ \t]+/g, '$1')
       .replace(/[ \t]+($|\n)/g, '$1')
       .replace(/\n{2,}/g, '\n');
