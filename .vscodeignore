@@ -11,8 +11,7 @@ typings/**
 .gitignore
 .stylelintrc
 .vscodeignore
-app-build.Gruntfile.bat
-app-build.Gruntfile.js
+Gruntfile.js
 jsconfig.json
 *.gif
 s-*.png
