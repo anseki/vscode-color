@@ -1,6 +1,6 @@
 {
   "name": "vscode-color",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Color Picker",
   "description": "Helper with GUI to generate color codes such as CSS color notations.",
   "keywords": [
@@ -32,9 +32,10 @@
     "comma-separated-values": "^3.6.4",
     "electron-prebuilt": "^0.37.5",
     "js-yaml": "^3.5.5",
-    "process-bridge": "^0.2.0"
+    "process-bridge": "^0.2.1"
   },
   "devDependencies": {
+    "asar": "^0.11.0",
     "clean-css": "^3.4.9",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^1.0.0",
