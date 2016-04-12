@@ -9,39 +9,70 @@ module.exports = grunt => {
     htmlclean = require('htmlclean'),
     CleanCSS = require('clean-css'),
 
-    PACKAGE_ROOT_PATH = __dirname,
-    TEMP_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'temp'),
+    ROOT_PATH = __dirname,
+    WORK_PATH = pathUtil.join(ROOT_PATH, 'temp'),
 
-    SRC_APP_DIR_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'lib/app'),
-    WORK_VSCE_PATH = pathUtil.join(TEMP_PATH, 'vsce'),
-    WORK_APP_DIR_PATH = pathUtil.join(WORK_VSCE_PATH, 'app'),
+    APP_PATH = pathUtil.join(ROOT_PATH, 'lib/app'),
+    WORK_APP_PATH = pathUtil.join(WORK_PATH, 'app'),
 
-    PACKAGE_JSON_PATH = pathUtil.join(PACKAGE_ROOT_PATH, 'package.json'),
-    PACKAGE_JSON = JSON.parse(fs.readFileSync(PACKAGE_JSON_PATH)),
+    WORK_VSCE_PATH = pathUtil.join(WORK_PATH, 'vsce'),
+    WORK_ASAR_PATH = pathUtil.join(WORK_VSCE_PATH, 'lib/app.asar'),
 
-    SRC_ASSETS = filelist.getSync(SRC_APP_DIR_PATH, {
-      filter: stats =>
-        stats.isFile() &&
-        !/^\./.test(stats.name) &&
-        !/\.scss$/.test(stats.name) &&
-        !/\.html$/.test(stats.name) &&
-        !/\.svg$/.test(stats.name) &&
-        stats.name !== 'package.json',
+    PACKAGE_JSON_PATH = pathUtil.join(ROOT_PATH, 'package.json'),
+    PACKAGE_JSON = require(PACKAGE_JSON_PATH),
+
+    TXT_APP_ASSETS = filelist.getSync(APP_PATH, {
+      filter: stats => stats.isFile() && /\.(?:css|js)$/.test(stats.name),
       listOf: 'fullPath'
     }),
 
-    UNPACK_ASSETS = [
+    SHARE_ASSETS = [
       'node_modules/jquery/dist/jquery.min.js'
-    ].map(path => pathUtil.join(PACKAGE_ROOT_PATH, path)),
+    ].map(path => pathUtil.join(ROOT_PATH, path)),
+
+    // node_modules that are referred or embedded. i.e. These are not copied into node_modules.
+    // EXPAND_MODULES = [],
+
+    EXT_TXT_FILES = [
+      {
+        expand: true,
+        cwd: `${ROOT_PATH}/`,
+        src: [
+          'README.md',
+          'lib/*.*',
+          'palettes/**'
+        ],
+        dest: `${WORK_VSCE_PATH}/`
+      },
+      {
+        src: `${ROOT_PATH}/extension_.js`,
+        dest: `${WORK_VSCE_PATH}/extension.js`
+      }
+    ],
+
+    EXT_BIN_FILES = [
+      {
+        src: PACKAGE_JSON_PATH,
+        dest: pathUtil.join(WORK_VSCE_PATH, 'package.json')
+      },
+      {
+        src: pathUtil.join(ROOT_PATH, 'icon.png'),
+        dest: pathUtil.join(WORK_VSCE_PATH, 'icon.png')
+      }
+    ],
 
     PACK_MODULES = ['process-bridge'];
 
-  var excludeSrcAssets = [], copiedAssets = [], protectedText = [];
+  var embeddedAssets = [], referredAssets = [], protectedText = [];
 
-  function productSrc(src) {
-    return src
+  function productSrc(content) {
+    return content
       .replace(/[^\n]*\[DEBUG\/\][^\n]*\n?/g, '')
       .replace(/[^\n]*\[DEBUG\][\s\S]*?\[\/DEBUG\][^\n]*\n?/g, '');
+  }
+
+  function removeBanner(content) { // remove it to embed
+    return content.replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '');
   }
 
   function minCss(content) {
@@ -50,11 +81,13 @@ module.exports = grunt => {
 
   function minJs(content) { // simple minify
     return content
+      .replace(/(^|\n) *\/\*\*\n(?: *\* [^\n]*\n)* *\*\//g, '$1') // JSDoc
       .replace(/\/\*[^\[\]]*?\*\//g, '')
       .replace(/((?:^|\n)[^\n\'\"\`\/]*?)\/\/[^\n\[\]]*(?=\n|$)/g, '$1') // safe
       .replace(/(^|\n)[ \t]+/g, '$1')
       .replace(/[ \t]+($|\n)/g, '$1')
-      .replace(/\n{2,}/g, '\n');
+      .replace(/\n{2,}/g, '\n')
+      .replace(/^\s+|\s+$/g, '');
   }
 
   function addProtectedText(text) {
@@ -79,32 +112,11 @@ module.exports = grunt => {
     return text;
   }
 
-  function isExists(path) {
-    try {
-      fs.accessSync(path); // only check existence.
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
-
-  function mkdirP(path) { // mkdir -p
-    path.split(/\/|\\/).reduce((parents, dir) => {
-      var path = pathUtil.resolve((parents += dir + pathUtil.sep)); // normalize
-      if (!isExists(path)) {
-        fs.mkdirSync(path);
-      } else if (!fs.statSync(path).isDirectory()) {
-        throw new Error('Non directory already exists: ' + path);
-      }
-      return parents;
-    }, '');
-  }
-
   grunt.initConfig({
     clean: {
       workDir: {
         options: {force: true},
-        src: [`${WORK_VSCE_PATH}/**/*`]
+        src: [`${WORK_APP_PATH}/**/*`, `${WORK_VSCE_PATH}/**/*`]
       }
     },
 
@@ -114,67 +126,52 @@ module.exports = grunt => {
           handlerByContent: content => {
             function getContent(path) {
               var content;
-              if (path.indexOf(SRC_APP_DIR_PATH) !== 0) {
-                grunt.log.writeln(`File doesn't exist in src dir: ${path}`);
-              } else if (!fs.existsSync(path)) {
+              if (!fs.existsSync(path)) {
                 grunt.fail.fatal(`File doesn't exist: ${path}`);
               }
-              content = fs.readFileSync(path, {encoding: 'utf8'}).trim();
+              content = removeBanner(fs.readFileSync(path, {encoding: 'utf8'})).trim();
               if (/\f|\x07/.test(content)) {
                 grunt.fail.fatal(`\\f or \\x07 that is used as marker is included: ${path}`);
               }
+
+              if (embeddedAssets.indexOf(path) < 0) { embeddedAssets.push(path); }
               return content;
             }
 
-            function packCss(s, left, path, right) {
-              function getCssContent(path) {
-                return getContent(path).replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '');
+            function getRefPath(path) {
+              var relPath, dest;
+              if (!fs.existsSync(path)) {
+                grunt.fail.fatal(`File doesn't exist: ${path}`);
               }
+              relPath = path.indexOf(APP_PATH) === 0 ?
+                pathUtil.relative(APP_PATH, path) : pathUtil.basename(path);
+              dest = pathUtil.join(WORK_APP_PATH, relPath);
 
-              path = pathUtil.join(SRC_APP_DIR_PATH, path);
-              excludeSrcAssets.push(path);
-              if (UNPACK_ASSETS.indexOf(path) < 0) {
-                let content = getCssContent(path).replace(/^\s*@charset\s+[^;]+;/gm, '');
-                if (!/\.min\.css$/.test(path)) { content = minCss(productSrc(content)); }
+              if (referredAssets.findIndex(referredAsset => referredAsset.src === path) < 0) {
+                referredAssets.push({src: path, dest: dest});
+              }
+              return relPath;
+            }
+
+            function packCss(s, left, path, right) {
+              path = pathUtil.resolve(APP_PATH, path);
+              if (SHARE_ASSETS.indexOf(path) < 0) {
+                let content = getContent(path).replace(/^\s*@charset\s+[^;]+;/gm, '');
+                if (!/\.min\./.test(path)) { content = minCss(productSrc(content)); }
                 return `<style>${addProtectedText(content)}</style>`;
               } else {
-                let basename = pathUtil.basename(path);
-                if (/\.min\.css$/.test(path)) {
-                  if (copiedAssets.indexOf(path) < 0) { copiedAssets.push(path); }
-                } else {
-                  basename = basename.replace(/\.css$/, '.min.css');
-                  fs.writeFileSync(pathUtil.join(WORK_APP_DIR_PATH, basename),
-                    minCss(productSrc(getCssContent(path))));
-                }
-                return addProtectedText(`${left}./${basename}${right}`);
+                return addProtectedText(`${left}./${getRefPath(path)}${right}`);
               }
             }
 
             function packJs(s, left, path, right) {
-              function getJsContent(path) {
-                return getContent(path)
-                  .replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '')
-                  .replace(/\s*\n\s*\/\/[^\n]*\s*$/, '')
-                  .replace(/^[;\s]+/, '')
-                  .replace(/[;\s]*$/, ';');
-              }
-
-              path = pathUtil.join(SRC_APP_DIR_PATH, path);
-              excludeSrcAssets.push(path);
-              if (UNPACK_ASSETS.indexOf(path) < 0) {
-                let content = getJsContent(path);
-                if (!/\.min\.js$/.test(path)) { content = minJs(productSrc(content)); }
+              path = pathUtil.resolve(APP_PATH, path);
+              if (SHARE_ASSETS.indexOf(path) < 0) {
+                let content = getContent(path).replace(/^[;\s]+/, '').replace(/[;\s]*$/, ';');
+                if (!/\.min\./.test(path)) { content = minJs(productSrc(content)); }
                 return `<script>${addProtectedText(content)}</script>`;
               } else {
-                let basename = pathUtil.basename(path);
-                if (/\.min\.js$/.test(path)) {
-                  if (copiedAssets.indexOf(path) < 0) { copiedAssets.push(path); }
-                } else {
-                  basename = basename.replace(/\.js$/, '.min.js');
-                  fs.writeFileSync(pathUtil.join(WORK_APP_DIR_PATH, basename),
-                    minJs(productSrc(getJsContent(path))));
-                }
-                return addProtectedText(`${left}./${basename}${right}`);
+                return addProtectedText(`${left}./${getRefPath(path)}${right}`);
               }
             }
 
@@ -193,66 +190,23 @@ module.exports = grunt => {
           }
         },
         expand: true,
-        cwd: `${SRC_APP_DIR_PATH}/`,
+        cwd: `${APP_PATH}/`,
         src: '**/*.html',
-        dest: `${WORK_APP_DIR_PATH}/`
+        dest: `${WORK_APP_PATH}/`
       },
 
-      copyFiles: {
+      getCopyFiles: {
         options: {
           handlerByTask: () => {
-            var files = SRC_ASSETS
-              .filter(path => excludeSrcAssets.indexOf(path) < 0)
+            var txtFiles = TXT_APP_ASSETS
+              .filter(path => embeddedAssets.indexOf(path) < 0 &&
+                referredAssets.findIndex(referredAsset => referredAsset.src === path) < 0)
               .map(srcPath => ({
                 src: srcPath,
-                dest: pathUtil.join(WORK_APP_DIR_PATH, pathUtil.relative(SRC_APP_DIR_PATH, srcPath))
+                dest: pathUtil.join(WORK_APP_PATH, pathUtil.relative(APP_PATH, srcPath))
               }))
-              .concat(copiedAssets.map(srcPath => ({
-                src: srcPath,
-                dest: pathUtil.join(WORK_APP_DIR_PATH, pathUtil.basename(srcPath))
-              })))
-              .reduce((assets, file) => {
-                // /(?<!\.min)\.(?:css|js|svg)$/
-                if (/\.(?:css|js|svg)$/.test(file.src) && !/\.min\.(?:css|js|svg)$/.test(file.src)) {
-                  // files that are not referred from html
-                  let content = fs.readFileSync(file.src, {encoding: 'utf8'}).trim();
-                  if (/\.css$/.test(file.src)) {
-                    content = minCss(productSrc(content.replace(/^\s*(?:\/\*[\s\S]*?\*\/\s*)+/, '')));
-                  } else if (/\.js$/.test(file.src)) {
-                    content = minJs(productSrc(content));
-                  } else { // svg
-                    content = htmlclean(content);
-                  }
-                  fs.writeFileSync(file.dest, content);
-                } else {
-                  assets.push(file);
-                }
-                return assets;
-              }, [])
-              // Since vsce checks modules even if `.vscodeignore` is written, copy dummy packages.
-              .concat(Object.keys(PACKAGE_JSON.dependencies).reduce((list, dependency) => {
-                if (PACK_MODULES.indexOf(dependency) >= 0) {
-                  list.push({
-                    expand: true,
-                    cwd: PACKAGE_ROOT_PATH,
-                    src: `node_modules/${dependency}/**`,
-                    dest: `${WORK_VSCE_PATH}/`
-                  });
-                } else {
-                  let packageJson =
-                      require(`${PACKAGE_ROOT_PATH}/node_modules/${dependency}/package.json`),
-                    destPath = pathUtil.join(WORK_VSCE_PATH, 'node_modules', dependency, 'package.json');
-                  delete packageJson.dependencies;
-                  mkdirP(pathUtil.dirname(destPath));
-                  fs.writeFileSync(destPath, JSON.stringify(packageJson));
-                }
-                return list;
-              }, []));
-            // files.push({
-            //   src: PACKAGE_JSON_PATH,
-            //   dest: pathUtil.join(WORK_DIR_PATH, 'package.json')
-            // });
-            grunt.config.merge({copy: {copyFiles: {files: files}}});
+              .concat(referredAssets, EXT_TXT_FILES);
+            grunt.config.merge({copy: {txtFiles: {files: txtFiles}}});
           }
         }
       },
@@ -265,18 +219,25 @@ module.exports = grunt => {
             return JSON.stringify(packageJson);
           }
         },
-        src: `${SRC_APP_DIR_PATH}/package.json`,
-        dest: `${WORK_APP_DIR_PATH}/package.json`
+        src: `${APP_PATH}/package.json`,
+        dest: `${WORK_APP_PATH}/package.json`
       },
 
-      extensionJs: {
+      // Since vsce checks modules even if `.vscodeignore` is written, copy dummy packages.
+      dummyModules: {
         options: {
           handlerByContent: content => {
-            return minJs(productSrc(content));
+            var packageJson = JSON.parse(content);
+            delete packageJson.dependencies;
+            return JSON.stringify(packageJson);
           }
         },
-        src: `${PACKAGE_ROOT_PATH}/extension_.js`,
-        dest: `${WORK_VSCE_PATH}/extension.js`
+        expand: true,
+        cwd: `${ROOT_PATH}/`,
+        src: Object.keys(PACKAGE_JSON.dependencies)
+          .filter(moduleName => PACK_MODULES.indexOf(moduleName) < 0)
+          .map(moduleName => `node_modules/${moduleName}/package.json`),
+        dest: `${WORK_VSCE_PATH}/`
       },
 
       vscodeIgnore: {
@@ -293,67 +254,74 @@ module.exports = grunt => {
     },
 
     copy: {
-      extensionFiles: {
-        expand: true,
-        cwd: `${PACKAGE_ROOT_PATH}/`,
-        src: [
-          'package.json',
-          'README.md',
-          'lib/*.*',
-          'palettes/**'
-        ],
-        dest: `${WORK_VSCE_PATH}/`,
+      txtFiles: {
         options: {
           process: (content, path) => {
-            return /\.js$/.test(path) ? minJs(productSrc(content)) : content;
+            var isMin = /\.min\./.test(path);
+            if (/\.css$/.test(path)) {
+              content = removeBanner(content);
+              if (!isMin) { content = minCss(productSrc(content)); }
+            } else if (/\.js$/.test(path)) {
+              content = removeBanner(content);
+              if (!isMin) { content = minJs(productSrc(content)); }
+            } else if (/\.svg$/.test(path)) {
+              if (!isMin) { content = htmlclean(content); }
+            } else if (pathUtil.basename(path) === 'package.json') {
+              let packageJson = JSON.parse(content);
+              // keys that are not required by electron
+              ['keywords', 'dependencies', 'devDependencies', 'homepage', 'repository', 'bugs']
+                .forEach(key => { delete packageJson[key]; });
+              content = JSON.stringify(packageJson);
+            }
+            return content;
           }
         }
       },
 
-      // copy.options breaks binary files.
+      // `copy.options.process` breaks binary files.
       binFiles: {
-        expand: true,
-        cwd: `${PACKAGE_ROOT_PATH}/`,
-        src: [
-          'icon.png'
-        ],
-        dest: `${WORK_VSCE_PATH}/`
+        files: [{
+          expand: true,
+          cwd: `${APP_PATH}/`,
+          src: ['**/*.{png,svgz,jpg,jpeg,jpe,jif,jfif,jfi,webp,bmp,dib,git,eot,ttf,woff,woff2}'],
+          dest: `${WORK_APP_PATH}/`
+        }].concat(
+          EXT_BIN_FILES,
+          PACK_MODULES.map(moduleName => ({
+            expand: true,
+            cwd: `${ROOT_PATH}/`,
+            src: `node_modules/${moduleName}/**`,
+            dest: `${WORK_VSCE_PATH}/`
+          }))
+        )
       }
     }
   });
 
   grunt.registerTask('asar', function() {
-    const asar = require('asar'),
-      rimraf = require('rimraf'),
-      ASAR_PATH = `${WORK_VSCE_PATH}/lib/app.asar`;
+    const asar = require('asar');
     var done = this.async(); // eslint-disable-line no-invalid-this
 
-    asar.createPackage(`${WORK_APP_DIR_PATH}/`, ASAR_PATH, error => {
+    asar.createPackage(`${WORK_APP_PATH}/`, WORK_ASAR_PATH, error => {
       var asarList;
       if (error) {
         done(error);
       } else {
 
-        asarList = asar.listPackage(ASAR_PATH);
-        fs.renameSync(ASAR_PATH, `${ASAR_PATH}_`);
-        rimraf(WORK_APP_DIR_PATH, {glob: false}, error => {
-          if (error) {
-            done(error);
-          } else {
-            let list = filelist.getSync(WORK_VSCE_PATH)
-              .reduce((list, stats) => {
-                if (stats.isFile()) {
-                  list.push(pathUtil.relative(WORK_VSCE_PATH, stats.fullPath));
-                }
-                return list;
-              }, []);
+        asarList = asar.listPackage(WORK_ASAR_PATH);
+        fs.renameSync(WORK_ASAR_PATH, `${WORK_ASAR_PATH}_`);
+        let list = filelist.getSync(WORK_VSCE_PATH)
+          .reduce((list, stats) => {
+            if (stats.isFile()) {
+              list.push(pathUtil.relative(WORK_VSCE_PATH, stats.fullPath));
+            }
+            return list;
+          }, []);
 
-            fs.writeFileSync(pathUtil.join(TEMP_PATH, `publish-files-${PACKAGE_JSON.version}.txt`),
-              `asar l app.asar\n\n${asarList.join('\n')}\n\n` +
-              `vsce ls\n\n${list.join('\n')}\n`);
-            done();
-          }
-        });
+        fs.writeFileSync(pathUtil.join(WORK_PATH, `publish-files-${PACKAGE_JSON.version}.txt`),
+          `asar l app.asar\n\n${asarList.join('\n')}\n\n` +
+          `vsce ls\n\n${list.join('\n')}\n`);
+        done();
       }
     });
   });
@@ -365,13 +333,12 @@ module.exports = grunt => {
   grunt.registerTask('default', [
     'clean:workDir',
     'taskHelper:packHtml',
-    'taskHelper:copyFiles',
-    'copy:copyFiles',
-    'taskHelper:appPackageJson',
-    'copy:extensionFiles',
+    'taskHelper:getCopyFiles',
+    'copy:txtFiles',
     'copy:binFiles',
-    'taskHelper:extensionJs',
+    'taskHelper:appPackageJson',
     'asar',
+    'taskHelper:dummyModules',
     'taskHelper:vscodeIgnore'
   ]);
 };
