@@ -45,7 +45,7 @@ Then a list of color notations is shown. The each target string is converted to 
 ![s-03](s-03.gif)
 
 It is converted with the notation you chose and current state of `Pick Color` dialog box.  
-For example, you turned on an `UC` (upper-case) option of `RGB-Hex` in the dialog box, and you invoked the command `Convert Color` with `white` as a target and a notation `RGB-Hex`, then that `white` is converted to `#FFF`. If you turned off that option, it is converted to `#fff`.
+For example, you turned on an `UC` (upper-case) checkbox of `RGB-Hex` in the dialog box, and you invoked the command `Convert Color` with a string `white` as a target and `RGB-Hex` notation, then that `white` is converted to `#FFF`. If you turned off that checkbox, it is converted to `#fff`.
 
 ![s-04](s-04.png)
 
