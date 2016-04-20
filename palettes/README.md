@@ -93,7 +93,7 @@ The useful range of all numbers above is `0` to `1`.
 
 And following keys also are parsed if the mapping has it:
 
-- A number a `a` key points is parsed as an alpha channel of the color, the useful range of the value is `0` to `1`.
+- A number an `a` key points is parsed as an alpha channel of the color, the useful range of the value is `0` to `1`.
 - A string a `name` key points is shown as a name of the color when a mouse hovers on the color palette.
 
 For example:
