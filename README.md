@@ -16,8 +16,11 @@ A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a
 
 ## Install
 
-You need [Node.js](https://nodejs.org/) installed and available in your `$PATH`.  
-Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".
+You need [Node.js](https://nodejs.org/) (including NPM) installed and available in your `$PATH`.  
+**Note:** If you use a Node Version Manager (e.g. nvm), the Node.js might not be available in a process VS Code will run, until you make it.
+
+Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".  
+**Note:** If Electron is not found in your computer, it will be installed automatically. Then, only when first launching, it may take some little time for setting up.
 
 ## Usage
 
