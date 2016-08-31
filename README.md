@@ -20,7 +20,7 @@ You need [Node.js](https://nodejs.org/) (including NPM) installed and available 
 **Note:** If you use a Node Version Manager (e.g. nvm), the Node.js might not be available in a process VS Code will run, until you make it.
 
 Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".  
-**Note:** If Electron is not found in your computer, it will be installed automatically. Then, only when first launching, it may take some little time for setting up.
+**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (Wait for the finish without closing VS Code.)
 
 ## Usage
 
