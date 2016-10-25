@@ -99,4 +99,4 @@ After the dialog box is opened, it stays in memory even after it is closed until
 
 An array that indicates the order of formats in each UI.  
 Allowed items are `"hsb"`, `"hsl"`, `"hwb"`, `"rgb"`, `"hex"`, `"named"`, `"cmyk"` or `"gray"`.  
-Items that are not contained in this array are moved to the top of the list automatically when it was used. If you want to make the list static, specify all formats in the order you desires, e.g. `["hsb", "hsl", "hwb", "rgb", "hex", "named", "cmyk", "gray"]`.
+Items that are not contained in this array are moved to the top of the list automatically when it was used. If you want to make the list static, specify all formats in the order you desire, e.g. `["hsb", "hsl", "hwb", "rgb", "hex", "named", "cmyk", "gray"]`.
