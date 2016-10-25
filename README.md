@@ -61,27 +61,27 @@ You can specify following options by User Settings or Workspace Settings.
 A name of preset package that switches UI and features.  
 Allowed values are:
 
-* `default`
+* `"default"`
 
 ![default](s-default.png)
 
-* `largePalette`
+* `"largePalette"`
 
 ![largePalette](s-largePalette.png)
 
-* `simple`
+* `"simple"`
 
 ![simple](s-simple.png)
 
-* `compact`
+* `"compact"`
 
 ![compact](s-compact.png)
 
-* `compact2`
+* `"compact2"`
 
 ![compact2](s-compact2.png)
 
-* `byPalette`
+* `"byPalette"`
 
 ![byPalette](s-byPalette.png)
 
@@ -94,3 +94,9 @@ For information about color palettes, see `README.md` that is found in that dire
 
 Stands by for a quick response.  
 After the dialog box is opened, it stays in memory even after it is closed until VS Code is exited (or VS Code might unload it).
+
+### `colorHelper.formatsOrder`
+
+An array that indicates the order of formats in each UI.  
+Allowed items are `"hsb"`, `"hsl"`, `"hwb"`, `"rgb"`, `"hex"`, `"named"`, `"cmyk"` or `"gray"`.  
+Items that are not contained in this array are moved to the top of the list automatically when it was used. If you want to make the list static, specify all formats in the order you desires, e.g. `["hsb", "hsl", "hwb", "rgb", "hex", "named", "cmyk", "gray"]`.
