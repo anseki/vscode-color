@@ -9,5 +9,8 @@ Steps to Reproduce:
 1. 
 2. 
 
-Log:
+Log (All lines):
 (Click menu of VS Code "Help > Toggle Developer Tools", and click "Console" tab)
+```
+
+```
