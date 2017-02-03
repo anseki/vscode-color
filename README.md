@@ -1,5 +1,7 @@
 # Color Picker for VS Code
 
+[![VS Marketplace](http://vsmarketplacebadge.apphb.com/version-short/anseki.vscode-color.svg)](https://marketplace.visualstudio.com/items?itemName=anseki.vscode-color) [![installs](http://vsmarketplacebadge.apphb.com/installs/anseki.vscode-color.svg)](https://marketplace.visualstudio.com/items?itemName=anseki.vscode-color) [![GitHub issues](https://img.shields.io/github/issues/anseki/vscode-color.svg)](https://github.com/anseki/vscode-color/issues) [![David](https://img.shields.io/david/anseki/vscode-color.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
+
 Helper with GUI to generate color codes such as CSS color notations.  
 And, a command [`Convert Color`](#convert-color) to change the color notation.
 
