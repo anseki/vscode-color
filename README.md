@@ -97,6 +97,6 @@ After the dialog box is opened, it stays in memory even after it is closed until
 
 ### `colorHelper.formatsOrder`
 
-An array that indicates the order of formats in each UI.  
+An array that indicates the order of formats in UI (e.g. drop-down list).  
 Allowed items are `"hsb"`, `"hsl"`, `"hwb"`, `"rgb"`, `"hex"`, `"named"`, `"cmyk"` or `"gray"`.  
-Items that are not contained in this array are moved to the top of the list automatically when it was used. If you want to make the list static, specify all formats in the order you desire, e.g. `["hsb", "hsl", "hwb", "rgb", "hex", "named", "cmyk", "gray"]`.
+This array doesn't have to contain all formats. The formats that are not contained in the array are moved to the top of the list in UI automatically when it was used. If you want to make the list static, specify all formats in the order you desire, e.g. `["hsb", "hsl", "hwb", "rgb", "hex", "named", "cmyk", "gray"]`.

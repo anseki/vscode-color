@@ -1,0 +1,10 @@
+.sass-cache
+.vscode
+lib/app.asar_
+node_modules
+temp
+typings
+jsconfig.json
+stats.json
+*.vsix
+extension.js

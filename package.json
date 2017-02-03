@@ -77,22 +77,22 @@
         "colorHelper.pickerForm": {
           "type": "string",
           "default": "default",
-          "description": "Name of preset package that switches UI and features. Allowed values are \"default\", \"largePalette\", \"simple\", \"compact\", \"compact2\" or \"byPalette\"."
+          "description": "A name of preset package that switches UI and features. Allowed values are \"default\", \"largePalette\", \"simple\", \"compact\", \"compact2\" or \"byPalette\"."
         },
         "colorHelper.storeDir": {
           "type": "string",
           "default": "",
-          "description": "Path to directory that contains your color palettes."
+          "description": "A path to directory that contains your color palettes. For information about color palettes, see `README.md` that is found in that directory."
         },
         "colorHelper.resident": {
           "type": "boolean",
           "default": false,
-          "description": "Stands by for a quick response. It stays in memory even after it is closed until it is unloaded."
+          "description": "Stands by for a quick response. After the dialog box is opened, it stays in memory even after it is closed until VS Code is exited (or VS Code might unload it)."
         },
         "colorHelper.formatsOrder": {
           "type": "array",
           "default": [],
-          "description": "Order of formats in each UI. Allowed items are \"hsb\", \"hsl\", \"hwb\", \"rgb\", \"hex\", \"named\", \"cmyk\" or \"gray\". Items that are not contained in this array are moved to the top of the list when it was used. If you want to make the list static, specify all formats like `[\"hsb\", \"hsl\", \"hwb\", \"rgb\", \"hex\", \"named\", \"cmyk\", \"gray\"]`."
+          "description": "An array that indicates the order of formats in UI (e.g. drop-down list). Allowed items are \"hsb\", \"hsl\", \"hwb\", \"rgb\", \"hex\", \"named\", \"cmyk\" or \"gray\". This array doesn't have to contain all formats. The formats that are not contained in the array are moved to the top of the list in UI automatically when it was used. If you want to make the list static, specify all formats in the order you desire, e.g. [\"hsb\", \"hsl\", \"hwb\", \"rgb\", \"hex\", \"named\", \"cmyk\", \"gray\"]."
         }
       }
     }
