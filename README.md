@@ -19,10 +19,10 @@ A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a
 ## Install
 
 You need [Node.js](https://nodejs.org/) (including NPM) installed and available in your `$PATH`.  
-**Note:** If you use a Node Version Manager (e.g. nvm), the Node.js might not be available in a process VS Code will run, until you make it.
+**Note:** If you use a Node Version Manager (e.g. nvm), the Node.js might not be available in a process VS Code will run, until you make it. (Especially in **Windows 10 / Vista**, the NPM might not be available.)
 
 Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".  
-**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (Wait for the finish without closing VS Code.)
+**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (**Please wait for the finish** without closing VS Code.)
 
 ## Usage
 
@@ -45,7 +45,7 @@ You can see tooltip information for some controls in the dialog box by hovering 
 ### Convert Color
 
 When a cursor or multiple cursors are positioned on strings that are color notation, press `Alt + C C` keys or run a command `Convert Color`.  
-Then a list of color notations is shown. The each target string is converted to a same color with the notation you chose.
+Then a list of color notations is shown. The target strings are converted to each color with the notation you chose.
 
 ![s-03](s-03.gif)
 
