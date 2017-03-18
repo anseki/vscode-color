@@ -14,10 +14,10 @@ const
     bp: 'byPalette'
   };
 
-var stdioData = '';
+let stdioData = '';
 
 function parseMessageLines(lines, cb) { // cb(requestId, message)
-  var matches, line;
+  let matches, line;
   RE_MESSAGE_LINE.lastIndex = 0;
   while ((matches = RE_MESSAGE_LINE.exec(lines))) {
     line = matches[1];
@@ -41,7 +41,7 @@ process.stdin.on('data', chunk => {
   stdioData = parseMessageLines(stdioData + chunk, value => {
     if (value === 'q') {
       processBridge.closeHost();
-      setTimeout(function() {
+      setTimeout(() => {
         process.exit(); // eslint-disable-line no-process-exit
       }, 500);
     } else {

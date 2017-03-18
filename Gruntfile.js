@@ -61,9 +61,9 @@ module.exports = grunt => {
       }
     ],
 
-    PACK_MODULES = ['process-bridge'];
+    PACK_MODULES = ['process-bridge'],
 
-  var embeddedAssets = [], referredAssets = [], protectedText = [];
+    embeddedAssets = [], referredAssets = [], protectedText = [];
 
   function productSrc(content) {
     return content
@@ -98,7 +98,8 @@ module.exports = grunt => {
 
   // Redo String#replace until target is not found
   function replaceComplete(text, re, fnc) {
-    var doNext = true, reg = new RegExp(re); // safe (not literal)
+    const reg = new RegExp(re); // safe (not literal)
+    let doNext = true;
     function fncWrap() {
       doNext = true;
       return fnc.apply(null, arguments);
@@ -125,12 +126,11 @@ module.exports = grunt => {
         options: {
           handlerByContent: content => {
             function getContent(path) {
-              var content;
               if (!fs.existsSync(path)) {
                 grunt.fail.fatal(`File doesn't exist: ${path}`);
               }
-              content = removeBanner(fs.readFileSync(path, {encoding: 'utf8'})).trim();
-              if (/\f|\x07/.test(content)) {
+              const content = removeBanner(fs.readFileSync(path, {encoding: 'utf8'})).trim();
+              if (/\f|\x07/.test(content)) { // eslint-disable-line no-control-regex
                 grunt.fail.fatal(`\\f or \\x07 that is used as marker is included: ${path}`);
               }
 
@@ -139,13 +139,12 @@ module.exports = grunt => {
             }
 
             function getRefPath(path) {
-              var relPath, dest;
               if (!fs.existsSync(path)) {
                 grunt.fail.fatal(`File doesn't exist: ${path}`);
               }
-              relPath = path.indexOf(APP_PATH) === 0 ?
-                pathUtil.relative(APP_PATH, path) : pathUtil.basename(path);
-              dest = pathUtil.join(WORK_APP_PATH, relPath);
+              const relPath = path.indexOf(APP_PATH) === 0 ?
+                  pathUtil.relative(APP_PATH, path) : pathUtil.basename(path),
+                dest = pathUtil.join(WORK_APP_PATH, relPath);
 
               if (referredAssets.findIndex(referredAsset => referredAsset.src === path) < 0) {
                 referredAssets.push({src: path, dest: dest});
@@ -175,7 +174,7 @@ module.exports = grunt => {
               }
             }
 
-            if (/\f|\x07/.test(content)) {
+            if (/\f|\x07/.test(content)) { // eslint-disable-line no-control-regex
               grunt.fail.fatal('\\f or \\x07 that is used as marker is included');
             }
 
@@ -186,6 +185,7 @@ module.exports = grunt => {
               .replace(/<\/style><style>/g, '')
               .replace(/<\/script><script>/g, '');
             // Restore protected texts
+            // eslint-disable-next-line no-control-regex
             return replaceComplete(content, /\f(\d+)\x07/g, (s, i) => protectedText[i] || '');
           }
         },
@@ -198,7 +198,7 @@ module.exports = grunt => {
       getCopyFiles: {
         options: {
           handlerByTask: () => {
-            var txtFiles = TXT_APP_ASSETS
+            const txtFiles = TXT_APP_ASSETS
               .filter(path => embeddedAssets.indexOf(path) < 0 &&
                 referredAssets.findIndex(referredAsset => referredAsset.src === path) < 0)
               .map(srcPath => ({
@@ -214,7 +214,7 @@ module.exports = grunt => {
       appPackageJson: {
         options: {
           handlerByContent: content => {
-            var packageJson = JSON.parse(content);
+            const packageJson = JSON.parse(content);
             packageJson.version = PACKAGE_JSON.version;
             return JSON.stringify(packageJson);
           }
@@ -227,7 +227,7 @@ module.exports = grunt => {
       dummyModules: {
         options: {
           handlerByContent: content => {
-            var packageJson = JSON.parse(content);
+            const packageJson = JSON.parse(content);
             delete packageJson.dependencies;
             return JSON.stringify(packageJson);
           }
@@ -257,7 +257,7 @@ module.exports = grunt => {
       txtFiles: {
         options: {
           process: (content, path) => {
-            var isMin = /\.min\./.test(path);
+            const isMin = /\.min\./.test(path);
             if (/\.css$/.test(path)) {
               content = removeBanner(content);
               if (!isMin) { content = minCss(productSrc(content)); }
@@ -299,16 +299,15 @@ module.exports = grunt => {
   });
 
   grunt.registerTask('asar', function() {
-    const asar = require('asar');
-    var done = this.async(); // eslint-disable-line no-invalid-this
+    const asar = require('asar'),
+      done = this.async(); // eslint-disable-line no-invalid-this
 
     asar.createPackage(`${WORK_APP_PATH}/`, WORK_ASAR_PATH, error => {
-      var asarList;
       if (error) {
         done(error);
       } else {
 
-        asarList = asar.listPackage(WORK_ASAR_PATH);
+        const asarList = asar.listPackage(WORK_ASAR_PATH);
         fs.renameSync(WORK_ASAR_PATH, `${WORK_ASAR_PATH}_`);
         let list = filelist.getSync(WORK_VSCE_PATH)
           .reduce((list, stats) => {

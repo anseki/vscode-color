@@ -3,29 +3,28 @@
 const fs = require('fs');
 
 function fixNum(num, min, max, digits) {
-  var exp;
   if (typeof min === 'number' && num < min) { return min; }
   if (typeof max === 'number' && num > max) { return max; }
   if (!/\./.test(num + '')) { return num; }
   if (typeof digits !== 'number') { digits = 3; }
-  exp = Math.pow(10, digits);
+  const exp = Math.pow(10, digits);
   return Math.round(num * exp) / exp;
 }
 
 function getHSV(color) {
-  var min = Math.min(color.r, color.g, color.b),
+  const min = Math.min(color.r, color.g, color.b),
     max = Math.max(color.r, color.g, color.b),
-    delta = max - min, hsv = {h: 0, s: 0, v: max},
-    deltaR, deltaG, deltaB;
+    delta = max - min,
+    hsv = {h: 0, s: 0, v: max};
 
   if (delta === 0) {
     hsv.h = 0;
     hsv.s = 0;
   } else {
     hsv.s = delta / max;
-    deltaR = ((max - color.r) / 6 + delta / 2) / delta;
-    deltaG = ((max - color.g) / 6 + delta / 2) / delta;
-    deltaB = ((max - color.b) / 6 + delta / 2) / delta;
+    const deltaR = ((max - color.r) / 6 + delta / 2) / delta,
+      deltaG = ((max - color.g) / 6 + delta / 2) / delta,
+      deltaB = ((max - color.b) / 6 + delta / 2) / delta;
     if (color.r === max) {
       hsv.h = deltaB - deltaG;
     } else if (color.g === max) {
@@ -47,15 +46,14 @@ function getHSV(color) {
 
 function getLAB(color) {
   // https://en.wikipedia.org/wiki/Standard_illuminant
-  const illuminant = [0.9504285, 1, 1.0889]; // CIE-L*ab D65/2' 1931
-  var
+  const illuminant = [0.9504285, 1, 1.0889], // CIE-L*ab D65/2' 1931
     r = (color.r > 0.04045) ? Math.pow((color.r + 0.055) / 1.055, 2.4) : color.r / 12.92,
     g = (color.g > 0.04045) ? Math.pow((color.g + 0.055) / 1.055, 2.4) : color.g / 12.92,
-    b = (color.b > 0.04045) ? Math.pow((color.b + 0.055) / 1.055, 2.4) : color.b / 12.92,
+    b = (color.b > 0.04045) ? Math.pow((color.b + 0.055) / 1.055, 2.4) : color.b / 12.92;
+  let
     x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / illuminant[0],
     y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / illuminant[1],
     z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / illuminant[2];
-
   x = (x > 0.008856) ? Math.pow(x, (1 / 3)) : (7.787 * x) + (16 / 116);
   y = (y > 0.008856) ? Math.pow(y, (1 / 3)) : (7.787 * y) + (16 / 116);
   z = (z > 0.008856) ? Math.pow(z, (1 / 3)) : (7.787 * z) + (16 / 116);
@@ -67,16 +65,14 @@ function getLAB(color) {
   };
 }
 
-var
+const
   cssColors = fs.readFileSync('./css-colors.txt', {encoding: 'utf8'})
     .split('\n').reduce((cssColors, line) => {
-      var cols, color = {}, channels;
       if (!line) { return cssColors; }
-      cols = line.trim().split('\t');
-
-      color.name = cols[0].trim();
+      const cols = line.trim().split('\t'),
+        color = {name: cols[0].trim()};
       if (cols[1]) {
-        channels = cols[1].trim().split(',');
+        const channels = cols[1].trim().split(',');
         color.r = fixNum(channels[0] / 255, 0, 1, 5);
         color.g = fixNum(channels[1] / 255, 0, 1, 5);
         color.b = fixNum(channels[2] / 255, 0, 1, 5);
@@ -133,7 +129,7 @@ td:nth-of-type(6) { width: 100px; }
 <table>
 ${
   cssColors.map((color, i) => {
-    var css;
+    let css;
     if (typeof color.r === 'number') {
       css = `${Math.round(color.r * 255)}, ${Math.round(color.g * 255)}, ${Math.round(color.b * 255)}`;
       css = typeof color.a === 'number' ? `rgba(${css}, ${Math.round(color.a)})` : `rgb(${css})`;
