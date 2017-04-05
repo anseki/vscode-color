@@ -26,7 +26,7 @@ Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and t
 
 ## Usage
 
-A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`.  
+A dialog box is shown by pressing `Alt + C P` keys (press <kbd>P</kbd> after release <kbd>Alt</kbd> and <kbd>C</kbd>) or command `Pick Color`.  
 If a cursor is positioned on a string that is color notation at that time, that string is selected as target for editing. The color notation is recognized even if it includes line-breaks and comments.  
 For example:
 
@@ -44,7 +44,7 @@ You can see tooltip information for some controls in the dialog box by hovering 
 
 ### Convert Color
 
-When a cursor or multiple cursors are positioned on strings that are color notation, press `Alt + C C` keys or run a command `Convert Color`.  
+When a cursor or multiple cursors are positioned on strings that are color notation, press `Alt + C C` (press <kbd>C</kbd> after release <kbd>Alt</kbd> and <kbd>C</kbd>) keys or run a command `Convert Color`.  
 Then a list of color notations is shown. The target strings are converted to each color with the notation you chose.
 
 ![s-03](s-03.gif)
