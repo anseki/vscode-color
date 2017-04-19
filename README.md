@@ -102,3 +102,12 @@ After the dialog box is opened, it stays in memory even after it is closed until
 An array that indicates the order of formats in UI (e.g. drop-down list).  
 Allowed items are `"hsb"`, `"hsl"`, `"hwb"`, `"rgb"`, `"hex"`, `"named"`, `"cmyk"` or `"gray"`.  
 This array doesn't have to contain all formats. The formats that are not contained in the array are moved to the top of the list in UI automatically when it was used. If you want to make the list static, specify all formats in the order you desire, e.g. `["hsb", "hsl", "hwb", "rgb", "hex", "named", "cmyk", "gray"]`.
+
+## Rendering trouble
+
+If your GPU driver has a problem, the dialog box might not be shown correctly. The following options try to avoid the problem.  
+**Note:** You should **not use these** if there is no problem. Also, it is not a solution to the root of the problem, and it might not solve the problem.
+
+### `colorHelper.disableGpu`
+
+If `1` is specified, disable GPU rendering on Windows. By default (`-1`), it is switched automatically dependent on current platform.
