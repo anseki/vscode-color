@@ -93,3 +93,16 @@ label {
     .ui-colorpicker-swatchesswitcher-container select { max-width: 180px; }
   }
 }
+
+// for `disableShadow`, `disableTransparent`
+
+body.disableShadow {
+  padding: 0;
+  .ui-dialog {
+    box-shadow: none;
+  }
+}
+
+body.disableTransparent .ui-dialog {
+  border-radius: 0;
+}

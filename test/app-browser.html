@@ -13,7 +13,7 @@
 <link href="./ui.css" rel="stylesheet"/>
 
 <style>
-body { padding: 30px; }
+/*body { padding: 30px; }*/
 </style>
 
 <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
@@ -31,11 +31,23 @@ function initUi(value, form, stats) {
   var uiController = window.exports; // emulate `require('./ui-controller.js')`
 
   uiController.init({
+    command: 'pick',
+    disableShadow: false,
+    disableTransparent: false,
+
     value: value,
     form: form,
     stats: stats || {},
     resizeWindow: function() {
-      console.log('resizeWindow(' + Array.prototype.slice.call(arguments).join(', ') + ')');
+      var args = Array.prototype.slice.call(arguments);
+      setTimeout(function() { // because resizeWindow is called before toggleClass
+        var cmpStyle = getComputedStyle(document.body, ''),
+          // clearance MAYBE width: 44 / height: 44 (from ui.scss)
+          clWidth = parseFloat(cmpStyle.paddingLeft) + parseFloat(cmpStyle.paddingRight),
+          clHeight = parseFloat(cmpStyle.paddingTop) + parseFloat(cmpStyle.paddingBottom);
+        console.log('resizeWindow(' + args.join(', ') + ')' +
+          ' BOX width: ' + (args[0] - clWidth) + ' height: ' + (args[1] - clHeight));
+      }, 0);
     },
     commit: value => {
       var stats = uiController.getStats(), position = [0,0]; // ui.getPosition();

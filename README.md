@@ -115,6 +115,21 @@ This array doesn't have to contain all formats. The formats that are not contain
 If your GPU driver has a problem, the dialog box might not be shown correctly. The following options try to avoid the problem.  
 **Note:** You should **not use these** if there is no problem. Also, it is not a solution to the root of the problem, and it might not solve the problem.
 
+**Steps:**
+
+1. If the dialog box is not shown correctly, set `colorHelper.disableGpu` to `1`.
+2. If that wasn't solved yet, set `colorHelper.disableShadow` to `true`.
+3. If that wasn't solved yet, set `colorHelper.disableTransparent` to `true`.
+4. If that wasn't solved yet, please visit [support page](https://github.com/anseki/vscode-color/issues).
+
 ### `colorHelper.disableGpu`
 
 If `1` is specified, disable GPU rendering on Windows. By default (`-1`), it is switched automatically dependent on current platform.
+
+### `colorHelper.disableShadow`
+
+If `true` is specified, disable drop shadow effect of the dialog box.
+
+### `colorHelper.disableTransparent`
+
+If `true` is specified, disable transparent window as the dialog box.

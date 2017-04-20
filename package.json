@@ -98,6 +98,16 @@
           "type": "number",
           "default": -1,
           "description": "1: Disable GPU / 0: System default / -1: Auto"
+        },
+        "colorHelper.disableShadow": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable drop shadow effect."
+        },
+        "colorHelper.disableTransparent": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable transparent window."
         }
       }
     }

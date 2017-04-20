@@ -112,3 +112,17 @@ label {
 #color-picker.form-byPalette .ui-colorpicker-swatchesswitcher-container select {
   max-width: 180px;
 }
+
+/* line 99, ui.scss */
+body.disableShadow {
+  padding: 0;
+}
+/* line 101, ui.scss */
+body.disableShadow .ui-dialog {
+  box-shadow: none;
+}
+
+/* line 106, ui.scss */
+body.disableTransparent .ui-dialog {
+  border-radius: 0;
+}
