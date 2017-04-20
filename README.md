@@ -11,7 +11,8 @@ A dialog box is shown by pressing `Alt + C P` keys or command `Pick Color`. If a
 
 * Supported color spaces to edit the color: HSB (HSV), RGB, Lab, and CMYK. With alpha channel.
 * Supported color notations to output the color: `hsb()`/`hsba()`, `hsl()`/`hsla()`, `hwb()`, `rgb()`/`rgba()`, RGB-Hex 3/4/6/8 digits, CSS Named Color, `device-cmyk()` and `gray()`.
-* Custom color palettes supported.
+* Custom [color palettes](#color-palettes) supported.
+* [`Convert Color`](#convert-color) command to change the color notation supported.
 * Multiple cursors supported.
 
 ![s-02](s-02.gif)
@@ -53,6 +54,12 @@ It is converted with the notation you chose and current state of `Pick Color` di
 For example, you turned on an `UC` (upper-case) checkbox of `RGB-Hex` in the dialog box, and you invoked the command `Convert Color` with a string `white` as a target and `RGB-Hex` notation, then that `white` is converted to `#FFF`. If you turned off that checkbox, it is converted to `#fff`.
 
 ![s-04](s-04.png)
+
+## Color palettes
+
+You can create custom color palettes. Also, you can specify color palettes that are loaded always, or color palettes that are loaded for only a project.  
+For example, a color palette as a design theme (or template) for your website is loaded only when that website project is being opened by VS Code.  
+See [`colorHelper.storeDir`](#colorhelperstoredir) option.
 
 ## Options
 
