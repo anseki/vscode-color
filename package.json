@@ -1,6 +1,6 @@
 {
   "name": "vscode-color",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "displayName": "Color Picker",
   "description": "Helper with GUI to generate color codes such as CSS color notations.",
   "keywords": [
