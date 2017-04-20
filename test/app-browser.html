@@ -16,7 +16,7 @@
 body { padding: 30px; }
 </style>
 
-<script src="./jquery-2.2.0.min.js"></script>
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
 <script src="./jquery-ui.min.js"></script>
 <script src="./jquery.colorpicker.min.js"></script>
 <script src="./jquery.colorpicker-swatchesswitcher.js"></script>
@@ -24,6 +24,7 @@ body { padding: 30px; }
 <script src="./jquery.datalist.min.js"></script><!-- Polyfill -->
 <!--<script src="./ui.js"></script>-->
 <script src="../../test/css-colors.js"></script>
+<script src="../../test/formats-name.js"></script>
 <script>/* ui.js */
 
 function initUi(value, form, stats) {
@@ -69,6 +70,8 @@ var paletteLoader = (() => {
 window.require = id => {
   if (/(?:\/|^)css-colors\.json$/.test(id)) {
     return window.cssColors;
+  } else if (/(?:\/|^)formats-name\.json$/.test(id)) {
+    return window.formatsName;
   } else if (/(?:\/|^)palette-loader\.js$/.test(id)) {
     return paletteLoader;
   }
