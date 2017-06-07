@@ -23,7 +23,11 @@ You need [Node.js](https://nodejs.org/) (including NPM) installed and available 
 **Note:** If you use a Node Version Manager (e.g. nvm), the Node.js might not be available in a process VS Code will run, until you make it. (Especially in **Windows 10 / Vista**, the NPM might not be available.)
 
 Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".  
-**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (**Please wait for the finish** without closing VS Code.)
+**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (**Please wait for the finish** without closing VS Code. If you do close VS Code before it complete, do the steps below.)
+
+If you stuck at launching this extension keeping showing **Please wait a while for setting up the extension...** at left bottom of VS Code, or this extension not work after you tweaked settings(especially in China). Just close VS Code and enter the extension folder (Most time this folder locate at C:\Users\[YOUR USER NAME]\.vscode\extensions\ for Windows), find anseki.vscode-color-[VERSION] folder, enter this folder and open you command tool(eg. shell/Windows PowerShell/bash or else) and **make sure you have locate to the anseki.vscode-color-[VERSION] folder in the command tool** then type `npm install`. Waiting it complete then enjoy it.  
+**Note:** If you live in China or some place having poor connection to npm server, you need some tricks to get through `npm install`. For China you can use `cnpm install` instead of `npm install` command after you install cnpm (for more detail please view: http://npm.taobao.org/).  
+**Note:** If you reinstall this extension, VS Code may ask you to relaunch VS Code before install Color Picker. If it is not working after you do so, then you need log out or reboot you system.
 
 ## Usage
 
