@@ -23,7 +23,8 @@ You need [Node.js](https://nodejs.org/) (including NPM) installed and available 
 **Note:** If you use a Node Version Manager (e.g. nvm), the Node.js might not be available in a process VS Code will run, until you make it. (Especially in **Windows 10 / Vista**, the NPM might not be available.)
 
 Then, launch the Command Pallete (`Ctrl + Shift + P` or `Cmd + Shift + P`) and type `ext install`, and then look for "Color Picker".  
-**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (**Please wait for the finish** without closing VS Code.)
+**Note:** If a few NPM modules that the extension uses are not found in your computer, those will be installed automatically. Then, only when first launching, it may take some little time for setting up. (**Please wait for the finish** without closing VS Code.)  
+**Note:** For alternative NPM (e.g. you are in China and you are using CNPM), see [Manual installation NPM modules](#manual-installation-npm-modules).
 
 ## Usage
 
@@ -133,3 +134,19 @@ If `true` is specified, disable drop shadow effect of the dialog box.
 ### `colorHelper.disableTransparent`
 
 If `true` is specified, disable transparent window as the dialog box.
+
+## Manual installation NPM modules
+
+You might be using your favorite alternative NPM. Also, if you're in China, maybe you are using [CNPM](https://github.com/cnpm/cnpm) instead of NPM.  
+The following steps install NPM modules manually:
+
+1. Install the Color Picker extension (see [Install](#install)), and **don't launch** the extension yet.
+2. Command:  
+(For Windows)  
+`cd /d "%USERPROFILE%\.vscode\extensions\anseki.vscode-color-x.x.x"`  
+(For others)  
+`cd ~/.vscode/extensions/anseki.vscode-color-x.x.x`  
+*The `x.x.x` above is a version of the extension.*
+3. Execute installation command. For example, CNPM:  
+`cnpm install`
+4. Launch the extension.
