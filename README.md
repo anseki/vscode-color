@@ -142,10 +142,8 @@ The following steps install NPM modules manually:
 
 1. Install the Color Picker extension (see [Install](#install)), and **don't launch** the extension yet.
 2. Command:  
-(For Windows)  
-`cd /d "%USERPROFILE%\.vscode\extensions\anseki.vscode-color-x.x.x"`  
-(For others)  
-`cd ~/.vscode/extensions/anseki.vscode-color-x.x.x`  
+`cd /d "%USERPROFILE%\.vscode\extensions\anseki.vscode-color-x.x.x"` (Windows)  
+`cd ~/.vscode/extensions/anseki.vscode-color-x.x.x` (others)  
 *The `x.x.x` above is a version of the extension.*
 3. Execute installation command. For example, CNPM:  
 `cnpm install`
