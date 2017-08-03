@@ -147,4 +147,4 @@ The following steps install NPM modules manually:
 *The `x.x.x` above is a version of the extension.*
 3. Execute installation command. For example, CNPM:  
 `cnpm install`
-4. Launch the extension.
+4. Launch the extension after the installing NPM modules was finished.
