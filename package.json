@@ -24,6 +24,34 @@
     "Other"
   ],
   "icon": "icon.png",
+  "badges": [
+    {
+      "url": "https://vsmarketplacebadge.apphb.com/version-short/anseki.vscode-color.svg",
+      "href": "https://marketplace.visualstudio.com/items?itemName=anseki.vscode-color",
+      "description": "VS Marketplace"
+    },
+    {
+      "url": "https://vsmarketplacebadge.apphb.com/installs-short/anseki.vscode-color.svg",
+      "href": "https://marketplace.visualstudio.com/items?itemName=anseki.vscode-color",
+      "description": "installs"
+    },
+    {
+      "url": "https://img.shields.io/github/issues/anseki/vscode-color.svg",
+      "href": "https://github.com/anseki/vscode-color/issues",
+      "description": "GitHub issues"
+    },
+    {
+      "url": "https://img.shields.io/david/anseki/vscode-color.svg",
+      "href": "package.json",
+      "description": "David"
+    },
+    {
+      "url": "https://img.shields.io/badge/license-MIT-blue.svg",
+      "href": "LICENSE-MIT",
+      "description": "license"
+    }
+  ],
+  "qna": "https://github.com/anseki/vscode-color/issues",
   "main": "./extension",
   "extensionMain": "./lib/color-helper",
   "engines": {
@@ -119,7 +147,7 @@
   "homepage": "https://github.com/anseki/vscode-color",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anseki/vscode-color.git"
+    "url": "https://github.com/anseki/vscode-color.git"
   },
   "bugs": {
     "url": "https://github.com/anseki/vscode-color/issues"
