@@ -7,17 +7,7 @@
     "color",
     "picker",
     "convert",
-    "hsb",
-    "hsv",
-    "hsl",
-    "hwb",
-    "rgb",
-    "hex",
-    "css",
-    "cmyk",
     "palette",
-    "style",
-    "gui",
     "dialog"
   ],
   "categories": [
