@@ -1,4 +1,4 @@
-/* line 4, jquery.ui.colorpicker-formats.scss */
+/* line 4, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats {
   box-sizing: border-box;
   width: 21em;
@@ -7,23 +7,23 @@
   display: inline-block;
   text-align: left;
 }
-/* line 14, jquery.ui.colorpicker-formats.scss */
+/* line 14, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats > select {
   box-sizing: border-box;
   width: 100%;
 }
 
-/* line 20, jquery.ui.colorpicker-formats.scss */
+/* line 20, jquery.colorpicker-formats.scss */
 .ui-colorpicker table td.ui-colorpicker-formats-container {
   text-align: right;
 }
 
-/* line 24, jquery.ui.colorpicker-formats.scss */
+/* line 24, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-frame {
   margin: 2px 0;
 }
 
-/* line 28, jquery.ui.colorpicker-formats.scss */
+/* line 28, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-options {
   margin-left: -0.5em;
   padding: 2px;
@@ -31,27 +31,27 @@
   font-size: 0.9em;
   display: none;
 }
-/* line 35, jquery.ui.colorpicker-formats.scss */
+/* line 35, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-options.state-active {
   display: block;
 }
-/* line 37, jquery.ui.colorpicker-formats.scss */
+/* line 37, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-options label {
   display: inline-block;
   white-space: nowrap;
   margin-left: 0.5em;
   cursor: pointer;
 }
-/* line 42, jquery.ui.colorpicker-formats.scss */
+/* line 42, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-options label select {
   margin-left: 3px;
 }
-/* line 45, jquery.ui.colorpicker-formats.scss */
+/* line 45, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-options input {
   vertical-align: middle;
 }
 
-/* line 48, jquery.ui.colorpicker-formats.scss */
+/* line 48, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formats-text {
   box-sizing: border-box;
   width: 100%;
@@ -60,25 +60,25 @@
   padding: 2px 1px;
 }
 
-/* line 56, jquery.ui.colorpicker-formats.scss */
+/* line 56, jquery.colorpicker-formats.scss */
 .ui-colorpicker table .ui-colorpicker-formats-text {
   font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
-/* line 60, jquery.ui.colorpicker-formats.scss */
+/* line 60, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formatsfooter {
   text-align: right;
 }
-/* line 63, jquery.ui.colorpicker-formats.scss */
+/* line 63, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formatsfooter button {
   width: 7em;
 }
-/* line 65, jquery.ui.colorpicker-formats.scss */
+/* line 65, jquery.colorpicker-formats.scss */
 .ui-colorpicker-formatsfooter button:first-child {
   margin-right: 3px;
 }
 
-/* line 69, jquery.ui.colorpicker-formats.scss */
+/* line 69, jquery.colorpicker-formats.scss */
 .ui-colorpicker table td.ui-colorpicker-formatsfooter-container {
   vertical-align: bottom;
 }
