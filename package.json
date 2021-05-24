@@ -50,7 +50,7 @@
   "dependencies": {
     "comma-separated-values": "^3.6.4",
     "electron-prebuilt": "0.37.3",
-    "js-yaml": "^3.8.3",
+    "js-yaml": "^3.13.1",
     "process-bridge": "^0.3.6"
   },
   "devDependencies": {
