@@ -62,7 +62,7 @@
     "grunt-task-helper": "^0.3.9",
     "htmlclean": "^3.0.2",
     "stats-filelist": "^1.0.0",
-    "vscode": "0.10.x"
+    "vscode": "1.1.x"
   },
   "contributes": {
     "commands": [
